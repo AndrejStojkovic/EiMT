@@ -25,12 +25,17 @@ public class Accommodation extends BaseAuditableEntity {
     private Host host;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Condition condition;
+
+    @Column(nullable = false)
     private Integer numRooms;
 
-    public Accommodation(String name, Category category, Host host, Integer numRooms) {
+    public Accommodation(String name, Category category, Host host, Condition condition, Integer numRooms) {
         this.name = name;
         this.category = category;
         this.host = host;
+        this.condition = condition;
         this.numRooms = numRooms;
     }
 }
