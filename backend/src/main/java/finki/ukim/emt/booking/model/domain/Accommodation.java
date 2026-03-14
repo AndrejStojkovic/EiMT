@@ -18,7 +18,7 @@ public class Accommodation extends BaseAuditableEntity {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private AccommodationCategory category;
+    private Category category;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -27,7 +27,7 @@ public class Accommodation extends BaseAuditableEntity {
     @Column(nullable = false)
     private Integer numRooms;
 
-    public Accommodation(String name, AccommodationCategory category, Host host, Integer numRooms) {
+    public Accommodation(String name, Category category, Host host, Integer numRooms) {
         this.name = name;
         this.category = category;
         this.host = host;

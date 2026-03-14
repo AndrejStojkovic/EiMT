@@ -1,6 +1,6 @@
 package finki.ukim.emt.booking.model.domain;
 
-public enum AccommodationCategory {
+public enum Category {
     ROOM,
     HOUSE,
     FLAT,
