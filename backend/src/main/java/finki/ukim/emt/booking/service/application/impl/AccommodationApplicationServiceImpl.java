@@ -3,7 +3,7 @@ package finki.ukim.emt.booking.service.application.impl;
 import finki.ukim.emt.booking.model.domain.Host;
 import finki.ukim.emt.booking.model.dto.CreateAccommodationDto;
 import finki.ukim.emt.booking.model.dto.DisplayAccommodationDto;
-import finki.ukim.emt.booking.model.exception.HostNotFoundException;
+import finki.ukim.emt.booking.model.exception.ResourceNotFoundException;
 import finki.ukim.emt.booking.service.application.AccommodationApplicationService;
 import finki.ukim.emt.booking.service.domain.AccommodationService;
 import finki.ukim.emt.booking.service.domain.HostService;
@@ -35,14 +35,14 @@ public class AccommodationApplicationServiceImpl implements AccommodationApplica
     @Override
     public DisplayAccommodationDto create(CreateAccommodationDto createAccommodationDto) {
         Host host = hostService.findById(createAccommodationDto.hostId())
-                .orElseThrow(() -> new  HostNotFoundException(createAccommodationDto.hostId()));
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("Host with id %d not found!", createAccommodationDto.hostId())));
         return DisplayAccommodationDto.from(accommodationService.create(createAccommodationDto.toAccommodation(host)));
     }
 
     @Override
     public Optional<DisplayAccommodationDto> update(Long id, CreateAccommodationDto createAccommodationDto) {
         Host host = hostService.findById(createAccommodationDto.hostId())
-                .orElseThrow(() -> new  HostNotFoundException(createAccommodationDto.hostId()));
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("Host with id %d not found!", createAccommodationDto.hostId())));
         return accommodationService.update(id, createAccommodationDto.toAccommodation(host))
                 .map(DisplayAccommodationDto::from);
     }
