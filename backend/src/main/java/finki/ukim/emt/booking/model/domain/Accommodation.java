@@ -1,5 +1,7 @@
 package finki.ukim.emt.booking.model.domain;
 
+import finki.ukim.emt.booking.model.enums.Category;
+import finki.ukim.emt.booking.model.enums.Condition;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

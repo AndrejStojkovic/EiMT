@@ -1,8 +1,8 @@
 package finki.ukim.emt.booking.model.dto;
 
 import finki.ukim.emt.booking.model.domain.Accommodation;
-import finki.ukim.emt.booking.model.domain.Category;
-import finki.ukim.emt.booking.model.domain.Condition;
+import finki.ukim.emt.booking.model.enums.Category;
+import finki.ukim.emt.booking.model.enums.Condition;
 
 import java.util.List;
 

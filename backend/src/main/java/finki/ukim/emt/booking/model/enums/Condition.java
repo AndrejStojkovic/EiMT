@@ -1,4 +1,4 @@
-package finki.ukim.emt.booking.model.domain;
+package finki.ukim.emt.booking.model.enums;
 
 public enum Condition {
     GOOD,

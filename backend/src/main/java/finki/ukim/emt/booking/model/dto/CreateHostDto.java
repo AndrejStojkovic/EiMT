@@ -10,7 +10,7 @@ public record CreateHostDto(
     @NotBlank(message = "A surname is required!")
     String surname,
     @NotBlank(message = "A country ID is required!")
-    Long country_id
+    Long countryId
 ) {
     public Host toHost(Country country) {
         return new Host(name, surname, country);
