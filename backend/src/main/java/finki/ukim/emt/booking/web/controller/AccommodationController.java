@@ -3,10 +3,8 @@ package finki.ukim.emt.booking.web.controller;
 import finki.ukim.emt.booking.model.dto.CreateAccommodationDto;
 import finki.ukim.emt.booking.model.dto.DisplayAccommodationDto;
 import finki.ukim.emt.booking.service.application.AccommodationApplicationService;
-import finki.ukim.emt.booking.service.domain.AccommodationService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

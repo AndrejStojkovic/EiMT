@@ -5,7 +5,6 @@ import finki.ukim.emt.booking.model.dto.DisplayCountryDto;
 import finki.ukim.emt.booking.service.application.CountryApplicationService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
