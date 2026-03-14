@@ -24,6 +24,7 @@ public class Accommodation extends BaseAuditableEntity {
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "host_id", nullable = false)
     private Host host;
 
     @Column(nullable = false)
