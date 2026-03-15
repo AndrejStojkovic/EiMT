@@ -24,5 +24,6 @@ CREATE TABLE accommodations
     category   VARCHAR(255) NOT NULL,
     host_id    BIGINT       NOT NULL REFERENCES hosts (id) ON DELETE CASCADE,
     condition  VARCHAR(255) NOT NULL,
-    num_rooms  INTEGER      NOT NULL
+    num_rooms  INTEGER      NOT NULL,
+    rented     BOOLEAN      NOT NULL
 );
