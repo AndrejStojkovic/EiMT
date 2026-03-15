@@ -29,13 +29,13 @@ public class Accommodation extends BaseAuditableEntity {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Condition condition;
+    private Condition condition = Condition.GOOD;
 
     @Column(nullable = false)
     private Integer numRooms;
 
     @Column(nullable = false)
-    private Boolean rented;
+    private Boolean rented = Boolean.FALSE;
 
     public Accommodation(String name, Category category, Host host, Condition condition, Integer numRooms) {
         this.name = name;
