@@ -1,5 +1,6 @@
 package finki.ukim.emt.booking.web.handler;
 
+import finki.ukim.emt.booking.model.exception.AccommodationNotAvailableException;
 import finki.ukim.emt.booking.model.exception.ResourceNotFoundException;
 import finki.ukim.emt.booking.web.dto.ApiError;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,16 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now()
         );
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(AccommodationNotAvailableException.class)
+    public ResponseEntity<ApiError> handleNotAvailable(AccommodationNotAvailableException exception) {
+        ApiError error = new ApiError(
+                HttpStatus.CONFLICT.value(),
+                exception.getMessage(),
+                LocalDateTime.now()
+        );
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
     }
 
     @ExceptionHandler(Exception.class)

@@ -12,7 +12,8 @@ public record DisplayAccommodationDto(
     Category category,
     Long host_id,
     Condition condition,
-    Integer numRooms
+    Integer numRooms,
+    Boolean rented
 ) {
     public static DisplayAccommodationDto from(Accommodation accommodation) {
         return new DisplayAccommodationDto(
@@ -21,7 +22,8 @@ public record DisplayAccommodationDto(
             accommodation.getCategory(),
             accommodation.getHost().getId(),
             accommodation.getCondition(),
-            accommodation.getNumRooms()
+            accommodation.getNumRooms(),
+            accommodation.getRented()
         );
     }
 

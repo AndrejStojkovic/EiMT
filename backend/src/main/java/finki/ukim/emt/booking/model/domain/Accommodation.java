@@ -34,11 +34,24 @@ public class Accommodation extends BaseAuditableEntity {
     @Column(nullable = false)
     private Integer numRooms;
 
+    @Column(nullable = false)
+    private Boolean rented;
+
     public Accommodation(String name, Category category, Host host, Condition condition, Integer numRooms) {
         this.name = name;
         this.category = category;
         this.host = host;
         this.condition = condition;
         this.numRooms = numRooms;
+        this.rented = false;
+    }
+
+    public Accommodation(String name, Category category, Host host, Condition condition, Integer numRooms, Boolean rented) {
+        this.name = name;
+        this.category = category;
+        this.host = host;
+        this.condition = condition;
+        this.numRooms = numRooms;
+        this.rented = rented;
     }
 }

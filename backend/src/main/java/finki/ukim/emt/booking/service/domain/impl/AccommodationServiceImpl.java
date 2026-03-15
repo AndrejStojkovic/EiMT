@@ -1,6 +1,8 @@
 package finki.ukim.emt.booking.service.domain.impl;
 
 import finki.ukim.emt.booking.model.domain.Accommodation;
+import finki.ukim.emt.booking.model.exception.AccommodationNotAvailableException;
+import finki.ukim.emt.booking.model.exception.ResourceNotFoundException;
 import finki.ukim.emt.booking.repository.AccommodationRepository;
 import finki.ukim.emt.booking.service.domain.AccommodationService;
 import org.springframework.stereotype.Service;
@@ -34,14 +36,14 @@ public class AccommodationServiceImpl implements AccommodationService {
     @Override
     public Optional<Accommodation> update(Long id, Accommodation accommodation) {
         return accommodationRepository
-            .findById(id)
-            .map((existingAccommodation) -> {
-                existingAccommodation.setName(accommodation.getName());
-                existingAccommodation.setCategory(accommodation.getCategory());
-                existingAccommodation.setHost(accommodation.getHost());
-                existingAccommodation.setNumRooms(accommodation.getNumRooms());
-                return accommodationRepository.save(existingAccommodation);
-            });
+                .findById(id)
+                .map((existingAccommodation) -> {
+                    existingAccommodation.setName(accommodation.getName());
+                    existingAccommodation.setCategory(accommodation.getCategory());
+                    existingAccommodation.setHost(accommodation.getHost());
+                    existingAccommodation.setNumRooms(accommodation.getNumRooms());
+                    return accommodationRepository.save(existingAccommodation);
+                });
     }
 
     @Override
@@ -49,5 +51,17 @@ public class AccommodationServiceImpl implements AccommodationService {
         Optional<Accommodation> accommodation = accommodationRepository.findById(id);
         accommodation.ifPresent(accommodationRepository::delete);
         return accommodation;
+    }
+
+    @Override
+    public Accommodation rent(Long id) {
+        Accommodation accommodation = accommodationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("Accommodation with id %d is not found!", id)));
+
+        if(accommodation.getRented()) {
+            throw new AccommodationNotAvailableException(id);
+        }
+        accommodation.setRented(true);
+        return accommodationRepository.save(accommodation);
     }
 }

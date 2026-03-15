@@ -34,12 +34,12 @@ public class CountryServiceImpl implements CountryService {
     @Override
     public Optional<Country> update(Long id, Country country) {
         return countryRepository
-            .findById(id)
-            .map((existingCountry) -> {
-                existingCountry.setName(country.getName());
-                existingCountry.setContinent(country.getContinent());
-                return countryRepository.save(country);
-            });
+                .findById(id)
+                .map((existingCountry) -> {
+                    existingCountry.setName(country.getName());
+                    existingCountry.setContinent(country.getContinent());
+                    return countryRepository.save(country);
+                });
     }
 
     @Override

@@ -50,4 +50,9 @@ public class AccommodationController {
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @PostMapping("/rent/{id}")
+    public ResponseEntity<DisplayAccommodationDto> rent(@PathVariable Long id) {
+        return ResponseEntity.ok(accommodationApplicationService.rent(id));
+    }
 }

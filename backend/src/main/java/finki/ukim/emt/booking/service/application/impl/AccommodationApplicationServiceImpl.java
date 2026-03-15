@@ -51,4 +51,9 @@ public class AccommodationApplicationServiceImpl implements AccommodationApplica
     public Optional<DisplayAccommodationDto> delete(Long id) {
         return accommodationService.delete(id).map(DisplayAccommodationDto::from);
     }
+
+    @Override
+    public DisplayAccommodationDto rent(Long id) {
+        return DisplayAccommodationDto.from(accommodationService.rent(id));
+    }
 }

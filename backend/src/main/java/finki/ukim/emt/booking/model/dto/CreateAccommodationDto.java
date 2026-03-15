@@ -12,9 +12,10 @@ public record CreateAccommodationDto(
     Long hostId,
     Condition condition,
     @Positive
-    Integer numRooms
+    Integer numRooms,
+    Boolean rented
 ) {
     public Accommodation toAccommodation(Host host) {
-        return new Accommodation(name, category, host, condition, numRooms);
+        return new Accommodation(name, category, host, condition, numRooms, rented);
     }
 }

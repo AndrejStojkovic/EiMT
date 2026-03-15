@@ -34,13 +34,13 @@ public class HostServiceImpl implements HostService {
     @Override
     public Optional<Host> update(Long id, Host host) {
         return hostRepository
-            .findById(id)
-            .map((existingHost) -> {
-                existingHost.setName(host.getName());
-                existingHost.setSurname(host.getSurname());
-                existingHost.setCountry(host.getCountry());
-                return hostRepository.save(existingHost);
-            });
+                .findById(id)
+                .map((existingHost) -> {
+                    existingHost.setName(host.getName());
+                    existingHost.setSurname(host.getSurname());
+                    existingHost.setCountry(host.getCountry());
+                    return hostRepository.save(existingHost);
+                });
     }
 
     @Override

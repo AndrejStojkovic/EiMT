@@ -15,4 +15,6 @@ public interface AccommodationService {
     Optional<Accommodation> update(Long id, Accommodation accommodation);
 
     Optional<Accommodation> delete(Long id);
+
+    Accommodation rent(Long id);
 }

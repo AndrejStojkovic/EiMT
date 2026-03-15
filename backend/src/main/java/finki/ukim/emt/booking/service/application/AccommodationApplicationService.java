@@ -16,4 +16,6 @@ public interface AccommodationApplicationService {
     Optional<DisplayAccommodationDto> update(Long id, CreateAccommodationDto createAccommodationDto);
 
     Optional<DisplayAccommodationDto> delete(Long id);
+
+    DisplayAccommodationDto rent(Long id);
 }
