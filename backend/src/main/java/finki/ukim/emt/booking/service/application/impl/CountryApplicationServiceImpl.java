@@ -7,7 +7,6 @@ import finki.ukim.emt.booking.service.domain.CountryService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CountryApplicationServiceImpl implements CountryApplicationService {
@@ -23,8 +22,8 @@ public class CountryApplicationServiceImpl implements CountryApplicationService 
     }
 
     @Override
-    public Optional<DisplayCountryDto> findById(Long id) {
-        return countryService.findById(id).map(DisplayCountryDto::from);
+    public DisplayCountryDto findById(Long id) {
+        return DisplayCountryDto.from(countryService.findById(id));
     }
 
     @Override
@@ -33,12 +32,12 @@ public class CountryApplicationServiceImpl implements CountryApplicationService 
     }
 
     @Override
-    public Optional<DisplayCountryDto> update(Long id, CreateCountryDto createCountryDto) {
-        return countryService.update(id, createCountryDto.toCountry()).map(DisplayCountryDto::from);
+    public DisplayCountryDto update(Long id, CreateCountryDto createCountryDto) {
+        return DisplayCountryDto.from(countryService.update(id, createCountryDto.toCountry()));
     }
 
     @Override
-    public Optional<DisplayCountryDto> delete(Long id) {
-        return countryService.delete(id).map(DisplayCountryDto::from);
+    public DisplayCountryDto delete(Long id) {
+        return DisplayCountryDto.from(countryService.delete(id));
     }
 }

@@ -3,7 +3,6 @@ package finki.ukim.emt.booking.service.domain;
 import finki.ukim.emt.booking.model.domain.Accommodation;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface AccommodationService {
     List<Accommodation> findAll();

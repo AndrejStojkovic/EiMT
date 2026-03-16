@@ -4,7 +4,6 @@ import finki.ukim.emt.booking.model.dto.CreateAccommodationDto;
 import finki.ukim.emt.booking.model.dto.DisplayAccommodationDto;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface AccommodationApplicationService {
     List<DisplayAccommodationDto> findAll();
