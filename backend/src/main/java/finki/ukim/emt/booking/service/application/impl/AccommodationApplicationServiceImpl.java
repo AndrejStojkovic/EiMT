@@ -1,5 +1,6 @@
 package finki.ukim.emt.booking.service.application.impl;
 
+import finki.ukim.emt.booking.model.domain.Accommodation;
 import finki.ukim.emt.booking.model.domain.Host;
 import finki.ukim.emt.booking.model.dto.CreateAccommodationDto;
 import finki.ukim.emt.booking.model.dto.DisplayAccommodationDto;
@@ -28,8 +29,14 @@ public class AccommodationApplicationServiceImpl implements AccommodationApplica
     }
 
     @Override
-    public Optional<DisplayAccommodationDto> findById(Long id) {
-        return accommodationService.findById(id).map(DisplayAccommodationDto::from);
+    public List<DisplayAccommodationDto> findAllByRented(Boolean rented) {
+        return DisplayAccommodationDto.from(accommodationService.findAllByRented(rented));
+    }
+
+    @Override
+    public DisplayAccommodationDto findById(Long id) {
+        Accommodation accommodation = accommodationService.findById(id);
+        return DisplayAccommodationDto.from(accommodation);
     }
 
     @Override
@@ -40,16 +47,15 @@ public class AccommodationApplicationServiceImpl implements AccommodationApplica
     }
 
     @Override
-    public Optional<DisplayAccommodationDto> update(Long id, CreateAccommodationDto createAccommodationDto) {
+    public DisplayAccommodationDto update(Long id, CreateAccommodationDto createAccommodationDto) {
         Host host = hostService.findById(createAccommodationDto.hostId())
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Host with id %d not found!", createAccommodationDto.hostId())));
-        return accommodationService.update(id, createAccommodationDto.toAccommodation(host))
-                .map(DisplayAccommodationDto::from);
+        return DisplayAccommodationDto.from(accommodationService.update(id, createAccommodationDto.toAccommodation(host)));
     }
 
     @Override
-    public Optional<DisplayAccommodationDto> delete(Long id) {
-        return accommodationService.delete(id).map(DisplayAccommodationDto::from);
+    public DisplayAccommodationDto delete(Long id) {
+        return DisplayAccommodationDto.from(accommodationService.delete(id));
     }
 
     @Override

@@ -9,13 +9,15 @@ import java.util.Optional;
 public interface AccommodationApplicationService {
     List<DisplayAccommodationDto> findAll();
 
-    Optional<DisplayAccommodationDto> findById(Long id);
+    List<DisplayAccommodationDto> findAllByRented(Boolean rented);
+
+    DisplayAccommodationDto findById(Long id);
 
     DisplayAccommodationDto create(CreateAccommodationDto createAccommodationDto);
 
-    Optional<DisplayAccommodationDto> update(Long id, CreateAccommodationDto createAccommodationDto);
+    DisplayAccommodationDto update(Long id, CreateAccommodationDto createAccommodationDto);
 
-    Optional<DisplayAccommodationDto> delete(Long id);
+    DisplayAccommodationDto delete(Long id);
 
     DisplayAccommodationDto rent(Long id);
 }

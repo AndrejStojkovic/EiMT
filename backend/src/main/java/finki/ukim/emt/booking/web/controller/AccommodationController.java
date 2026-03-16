@@ -23,11 +23,14 @@ public class AccommodationController {
         return ResponseEntity.ok(accommodationApplicationService.findAll());
     }
 
+    @GetMapping("/rented/{rented}")
+    public ResponseEntity<List<DisplayAccommodationDto>> findAllByRented(@PathVariable Boolean rented) {
+        return ResponseEntity.ok(accommodationApplicationService.findAllByRented(rented));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<DisplayAccommodationDto> findById(@PathVariable Long id) {
-        return accommodationApplicationService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        return ResponseEntity.ok(accommodationApplicationService.findById(id));
     }
 
     @PostMapping("/add")
@@ -39,16 +42,12 @@ public class AccommodationController {
     public ResponseEntity<DisplayAccommodationDto> update(
             @PathVariable Long id,
             @RequestBody @Valid CreateAccommodationDto createAccommodationDto) {
-        return accommodationApplicationService.update(id, createAccommodationDto)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        return ResponseEntity.ok(accommodationApplicationService.update(id, createAccommodationDto));
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<DisplayAccommodationDto> delete(@PathVariable Long id) {
-        return accommodationApplicationService.delete(id)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        return ResponseEntity.ok(accommodationApplicationService.delete(id));
     }
 
     @PostMapping("/rent/{id}")

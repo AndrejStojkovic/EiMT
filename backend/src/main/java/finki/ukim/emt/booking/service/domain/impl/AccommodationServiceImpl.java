@@ -8,7 +8,6 @@ import finki.ukim.emt.booking.service.domain.AccommodationService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AccommodationServiceImpl implements AccommodationService {
@@ -24,8 +23,14 @@ public class AccommodationServiceImpl implements AccommodationService {
     }
 
     @Override
-    public Optional<Accommodation> findById(Long id) {
-        return accommodationRepository.findById(id);
+    public List<Accommodation> findAllByRented(Boolean rented) {
+        return accommodationRepository.findAccommodationByRented(rented);
+    }
+
+    @Override
+    public Accommodation findById(Long id) {
+        return accommodationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("Accommodation with id %d not found!", id)));
     }
 
     @Override
@@ -34,22 +39,21 @@ public class AccommodationServiceImpl implements AccommodationService {
     }
 
     @Override
-    public Optional<Accommodation> update(Long id, Accommodation accommodation) {
-        return accommodationRepository
-                .findById(id)
-                .map((existingAccommodation) -> {
-                    existingAccommodation.setName(accommodation.getName());
-                    existingAccommodation.setCategory(accommodation.getCategory());
-                    existingAccommodation.setHost(accommodation.getHost());
-                    existingAccommodation.setNumRooms(accommodation.getNumRooms());
-                    return accommodationRepository.save(existingAccommodation);
-                });
+    public Accommodation update(Long id, Accommodation accommodation) {
+        Accommodation existingAccommodation = accommodationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("Accommodation with id %d not found!", id)));
+        existingAccommodation.setName(accommodation.getName());
+        existingAccommodation.setCategory(accommodation.getCategory());
+        existingAccommodation.setHost(accommodation.getHost());
+        existingAccommodation.setNumRooms(accommodation.getNumRooms());
+        return accommodationRepository.save(existingAccommodation);
     }
 
     @Override
-    public Optional<Accommodation> delete(Long id) {
-        Optional<Accommodation> accommodation = accommodationRepository.findById(id);
-        accommodation.ifPresent(accommodationRepository::delete);
+    public Accommodation delete(Long id) {
+        Accommodation accommodation = accommodationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("Accommodation with id %d not found!", id)));
+        accommodationRepository.delete(accommodation);
         return accommodation;
     }
 

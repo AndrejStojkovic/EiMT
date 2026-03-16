@@ -8,13 +8,15 @@ import java.util.Optional;
 public interface AccommodationService {
     List<Accommodation> findAll();
 
-    Optional<Accommodation> findById(Long id);
+    List<Accommodation> findAllByRented(Boolean rented);
+
+    Accommodation findById(Long id);
 
     Accommodation create(Accommodation accommodation);
 
-    Optional<Accommodation> update(Long id, Accommodation accommodation);
+    Accommodation update(Long id, Accommodation accommodation);
 
-    Optional<Accommodation> delete(Long id);
+    Accommodation delete(Long id);
 
     Accommodation rent(Long id);
 }
