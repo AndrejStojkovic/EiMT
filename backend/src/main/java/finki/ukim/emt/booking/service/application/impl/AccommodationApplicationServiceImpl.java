@@ -10,7 +10,6 @@ import finki.ukim.emt.booking.service.domain.HostService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AccommodationApplicationServiceImpl implements AccommodationApplicationService {
@@ -25,11 +24,6 @@ public class AccommodationApplicationServiceImpl implements AccommodationApplica
     @Override
     public List<DisplayAccommodationDto> findAll() {
         return DisplayAccommodationDto.from(accommodationService.findAll());
-    }
-
-    @Override
-    public List<DisplayAccommodationDto> findAllByRented(Boolean rented) {
-        return DisplayAccommodationDto.from(accommodationService.findAllByRented(rented));
     }
 
     @Override

@@ -7,8 +7,6 @@ import java.util.List;
 public interface AccommodationService {
     List<Accommodation> findAll();
 
-    List<Accommodation> findAllByRented(Boolean rented);
-
     Accommodation findById(Long id);
 
     Accommodation create(Accommodation accommodation);

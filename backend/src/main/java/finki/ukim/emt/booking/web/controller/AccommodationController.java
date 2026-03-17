@@ -23,11 +23,6 @@ public class AccommodationController {
         return ResponseEntity.ok(accommodationApplicationService.findAll());
     }
 
-    @GetMapping("/rented/{rented}")
-    public ResponseEntity<List<DisplayAccommodationDto>> findAllByRented(@PathVariable Boolean rented) {
-        return ResponseEntity.ok(accommodationApplicationService.findAllByRented(rented));
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<DisplayAccommodationDto> findById(@PathVariable Long id) {
         return ResponseEntity.ok(accommodationApplicationService.findById(id));

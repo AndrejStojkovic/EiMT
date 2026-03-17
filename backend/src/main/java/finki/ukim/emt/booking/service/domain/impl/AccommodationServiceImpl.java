@@ -23,11 +23,6 @@ public class AccommodationServiceImpl implements AccommodationService {
     }
 
     @Override
-    public List<Accommodation> findAllByRented(Boolean rented) {
-        return accommodationRepository.findAccommodationByRented(rented);
-    }
-
-    @Override
     public Accommodation findById(Long id) {
         return accommodationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Accommodation with id %d not found!", id)));
