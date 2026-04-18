@@ -3,6 +3,8 @@ package finki.ukim.emt.booking.repository;
 import finki.ukim.emt.booking.model.domain.Accommodation;
 import finki.ukim.emt.booking.model.projection.AccommodationDetailedSummaryProjection;
 import finki.ukim.emt.booking.model.projection.AccommodationSummaryProjection;
+import lombok.NonNull;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -12,6 +14,10 @@ import java.util.List;
 
 @Repository
 public interface AccommodationRepository extends JpaRepository<Accommodation, Long>, JpaSpecificationExecutor<Accommodation> {
+    @EntityGraph(value = "Accommodation.withHostAndCountry", type = EntityGraph.EntityGraphType.FETCH)
+    List<Accommodation> findAllWithHostAndCountry();
+
+    @EntityGraph(value = "Accommodation.withHostAndCountry", type = EntityGraph.EntityGraphType.FETCH)
     List<Accommodation> findAccommodationByRented(Boolean rented);
 
     @Query("""
