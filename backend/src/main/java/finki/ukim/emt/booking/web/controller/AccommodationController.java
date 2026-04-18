@@ -2,8 +2,10 @@ package finki.ukim.emt.booking.web.controller;
 
 import finki.ukim.emt.booking.model.dto.CreateAccommodationDto;
 import finki.ukim.emt.booking.model.dto.DisplayAccommodationDto;
+import finki.ukim.emt.booking.model.dto.FilterAccommodationDto;
 import finki.ukim.emt.booking.service.application.AccommodationApplicationService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +23,16 @@ public class AccommodationController {
     @GetMapping
     public ResponseEntity<List<DisplayAccommodationDto>> findAll() {
         return ResponseEntity.ok(accommodationApplicationService.findAll());
+    }
+
+    @GetMapping("/paginated")
+    public ResponseEntity<Page<DisplayAccommodationDto>> findAll(
+            @ModelAttribute FilterAccommodationDto filter,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "name") String sortBy
+    ) {
+        return ResponseEntity.ok(accommodationApplicationService.findAll(filter, page, size, sortBy));
     }
 
     @GetMapping("/rented/{rented}")

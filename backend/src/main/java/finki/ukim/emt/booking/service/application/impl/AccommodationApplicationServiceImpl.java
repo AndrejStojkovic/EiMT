@@ -4,13 +4,14 @@ import finki.ukim.emt.booking.model.domain.Accommodation;
 import finki.ukim.emt.booking.model.domain.Host;
 import finki.ukim.emt.booking.model.dto.CreateAccommodationDto;
 import finki.ukim.emt.booking.model.dto.DisplayAccommodationDto;
+import finki.ukim.emt.booking.model.dto.FilterAccommodationDto;
 import finki.ukim.emt.booking.service.application.AccommodationApplicationService;
 import finki.ukim.emt.booking.service.domain.AccommodationService;
 import finki.ukim.emt.booking.service.domain.HostService;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AccommodationApplicationServiceImpl implements AccommodationApplicationService {
@@ -58,5 +59,11 @@ public class AccommodationApplicationServiceImpl implements AccommodationApplica
     @Override
     public DisplayAccommodationDto rent(Long id) {
         return DisplayAccommodationDto.from(accommodationService.rent(id));
+    }
+
+    @Override
+    public Page<DisplayAccommodationDto> findAll(FilterAccommodationDto filter, int page, int size, String sortBy) {
+        return accommodationService.findAll(filter, page, size, sortBy)
+                .map(DisplayAccommodationDto::from);
     }
 }

@@ -1,10 +1,17 @@
 package finki.ukim.emt.booking.service.domain.impl;
 
 import finki.ukim.emt.booking.model.domain.Accommodation;
+import finki.ukim.emt.booking.model.dto.FilterAccommodationDto;
 import finki.ukim.emt.booking.model.exception.AccommodationNotAvailableException;
 import finki.ukim.emt.booking.model.exception.ResourceNotFoundException;
 import finki.ukim.emt.booking.repository.AccommodationRepository;
 import finki.ukim.emt.booking.service.domain.AccommodationService;
+import finki.ukim.emt.booking.specification.AccommodationSpecification;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -67,5 +74,12 @@ public class AccommodationServiceImpl implements AccommodationService {
         }
         accommodation.setRented(true);
         return accommodationRepository.save(accommodation);
+    }
+
+    @Override
+    public Page<Accommodation> findAll(FilterAccommodationDto filter, int page, int size, String sortBy) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).ascending());
+        Specification<Accommodation> specification = AccommodationSpecification.withFilters(filter);
+        return accommodationRepository.findAll(specification, pageable);
     }
 }
