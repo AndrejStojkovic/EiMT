@@ -4,6 +4,8 @@ import finki.ukim.emt.booking.model.domain.Accommodation;
 import finki.ukim.emt.booking.model.dto.FilterAccommodationDto;
 import finki.ukim.emt.booking.model.exception.AccommodationNotAvailableException;
 import finki.ukim.emt.booking.model.exception.ResourceNotFoundException;
+import finki.ukim.emt.booking.model.projection.AccommodationDetailedSummaryProjection;
+import finki.ukim.emt.booking.model.projection.AccommodationSummaryProjection;
 import finki.ukim.emt.booking.repository.AccommodationRepository;
 import finki.ukim.emt.booking.service.domain.AccommodationService;
 import finki.ukim.emt.booking.specification.AccommodationSpecification;
@@ -32,6 +34,16 @@ public class AccommodationServiceImpl implements AccommodationService {
     @Override
     public List<Accommodation> findAllByRented(Boolean rented) {
         return accommodationRepository.findAccommodationByRented(rented);
+    }
+
+    @Override
+    public List<AccommodationSummaryProjection> findAllSummary() {
+        return accommodationRepository.findAllSummaryProjections();
+    }
+
+    @Override
+    public List<AccommodationDetailedSummaryProjection> findAllDetailedSummary() {
+        return accommodationRepository.findAllDetailedSummaryProjections();
     }
 
     @Override

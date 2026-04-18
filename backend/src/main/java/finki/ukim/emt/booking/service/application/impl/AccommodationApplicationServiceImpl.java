@@ -5,6 +5,8 @@ import finki.ukim.emt.booking.model.domain.Host;
 import finki.ukim.emt.booking.model.dto.CreateAccommodationDto;
 import finki.ukim.emt.booking.model.dto.DisplayAccommodationDto;
 import finki.ukim.emt.booking.model.dto.FilterAccommodationDto;
+import finki.ukim.emt.booking.model.projection.AccommodationDetailedSummaryProjection;
+import finki.ukim.emt.booking.model.projection.AccommodationSummaryProjection;
 import finki.ukim.emt.booking.service.application.AccommodationApplicationService;
 import finki.ukim.emt.booking.service.domain.AccommodationService;
 import finki.ukim.emt.booking.service.domain.HostService;
@@ -31,6 +33,16 @@ public class AccommodationApplicationServiceImpl implements AccommodationApplica
     @Override
     public List<DisplayAccommodationDto> findAllByRented(Boolean rented) {
         return DisplayAccommodationDto.from(accommodationService.findAllByRented(rented));
+    }
+
+    @Override
+    public List<AccommodationSummaryProjection> findAllSummary() {
+        return accommodationService.findAllSummary();
+    }
+
+    @Override
+    public List<AccommodationDetailedSummaryProjection> findAllDetailedSummary() {
+        return accommodationService.findAllDetailedSummary();
     }
 
     @Override

@@ -3,6 +3,8 @@ package finki.ukim.emt.booking.service.application;
 import finki.ukim.emt.booking.model.dto.CreateAccommodationDto;
 import finki.ukim.emt.booking.model.dto.DisplayAccommodationDto;
 import finki.ukim.emt.booking.model.dto.FilterAccommodationDto;
+import finki.ukim.emt.booking.model.projection.AccommodationDetailedSummaryProjection;
+import finki.ukim.emt.booking.model.projection.AccommodationSummaryProjection;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -11,6 +13,10 @@ public interface AccommodationApplicationService {
     List<DisplayAccommodationDto> findAll();
 
     List<DisplayAccommodationDto> findAllByRented(Boolean rented);
+
+    List<AccommodationSummaryProjection> findAllSummary();
+
+    List<AccommodationDetailedSummaryProjection> findAllDetailedSummary();
 
     DisplayAccommodationDto findById(Long id);
 

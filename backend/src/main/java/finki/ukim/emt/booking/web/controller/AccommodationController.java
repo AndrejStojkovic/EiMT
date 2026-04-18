@@ -3,6 +3,8 @@ package finki.ukim.emt.booking.web.controller;
 import finki.ukim.emt.booking.model.dto.CreateAccommodationDto;
 import finki.ukim.emt.booking.model.dto.DisplayAccommodationDto;
 import finki.ukim.emt.booking.model.dto.FilterAccommodationDto;
+import finki.ukim.emt.booking.model.projection.AccommodationDetailedSummaryProjection;
+import finki.ukim.emt.booking.model.projection.AccommodationSummaryProjection;
 import finki.ukim.emt.booking.service.application.AccommodationApplicationService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -33,6 +35,16 @@ public class AccommodationController {
             @RequestParam(defaultValue = "name") String sortBy
     ) {
         return ResponseEntity.ok(accommodationApplicationService.findAll(filter, page, size, sortBy));
+    }
+
+    @GetMapping("/summary")
+    public ResponseEntity<List<AccommodationSummaryProjection>> findAllSummary() {
+        return ResponseEntity.ok(accommodationApplicationService.findAllSummary());
+    }
+
+    @GetMapping("/detailed-summary")
+    public ResponseEntity<List<AccommodationDetailedSummaryProjection>> findAllDetailedSummary() {
+        return ResponseEntity.ok(accommodationApplicationService.findAllDetailedSummary());
     }
 
     @GetMapping("/rented/{rented}")
