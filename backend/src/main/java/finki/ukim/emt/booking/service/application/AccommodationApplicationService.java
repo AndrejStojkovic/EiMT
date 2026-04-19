@@ -28,5 +28,7 @@ public interface AccommodationApplicationService {
 
     DisplayAccommodationDto rent(Long id);
 
+    DisplayAccommodationDto unrent(Long id);
+
     Page<DisplayAccommodationDto> findAll(FilterAccommodationDto filter, int page, int size, String sortBy);
 }

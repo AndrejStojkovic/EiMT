@@ -74,6 +74,11 @@ public class AccommodationApplicationServiceImpl implements AccommodationApplica
     }
 
     @Override
+    public DisplayAccommodationDto unrent(Long id) {
+        return DisplayAccommodationDto.from(accommodationService.unrent(id));
+    }
+
+    @Override
     public Page<DisplayAccommodationDto> findAll(FilterAccommodationDto filter, int page, int size, String sortBy) {
         return accommodationService.findAll(filter, page, size, sortBy)
                 .map(DisplayAccommodationDto::from);

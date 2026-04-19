@@ -109,6 +109,19 @@ public class AccommodationServiceImpl implements AccommodationService {
     }
 
     @Override
+    public Accommodation unrent(Long id) {
+        Accommodation accommodation = accommodationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("Accommodation with id %d is not found!", id)));
+
+        if(!accommodation.getRented()) {
+            return accommodation;
+        }
+
+        accommodation.setRented(false);
+        return accommodationRepository.save(accommodation);
+    }
+
+    @Override
     public Page<Accommodation> findAll(FilterAccommodationDto filter, int page, int size, String sortBy) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).ascending());
         Specification<Accommodation> specification = AccommodationSpecification.withFilters(filter);
