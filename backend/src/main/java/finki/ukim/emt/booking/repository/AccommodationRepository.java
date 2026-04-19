@@ -14,8 +14,10 @@ import java.util.List;
 
 @Repository
 public interface AccommodationRepository extends JpaRepository<Accommodation, Long>, JpaSpecificationExecutor<Accommodation> {
+    @Override
     @EntityGraph(value = "Accommodation.withHostAndCountry", type = EntityGraph.EntityGraphType.FETCH)
-    List<Accommodation> findAllWithHostAndCountry();
+    @NonNull
+    List<Accommodation> findAll();
 
     @EntityGraph(value = "Accommodation.withHostAndCountry", type = EntityGraph.EntityGraphType.FETCH)
     List<Accommodation> findAccommodationByRented(Boolean rented);
