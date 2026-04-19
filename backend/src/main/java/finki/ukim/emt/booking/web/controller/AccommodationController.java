@@ -2,10 +2,12 @@ package finki.ukim.emt.booking.web.controller;
 
 import finki.ukim.emt.booking.model.dto.CreateAccommodationDto;
 import finki.ukim.emt.booking.model.dto.DisplayAccommodationDto;
+import finki.ukim.emt.booking.model.dto.DisplayAccommodationViewDto;
 import finki.ukim.emt.booking.model.dto.FilterAccommodationDto;
 import finki.ukim.emt.booking.model.projection.AccommodationDetailedSummaryProjection;
 import finki.ukim.emt.booking.model.projection.AccommodationSummaryProjection;
 import finki.ukim.emt.booking.service.application.AccommodationApplicationService;
+import finki.ukim.emt.booking.service.application.AccommodationViewApplicationService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +19,11 @@ import java.util.List;
 @RequestMapping("api/accommodations")
 public class AccommodationController {
     private final AccommodationApplicationService accommodationApplicationService;
+    private final AccommodationViewApplicationService accommodationViewApplicationService;
 
-    public AccommodationController(AccommodationApplicationService accommodationApplicationService) {
+    public AccommodationController(AccommodationApplicationService accommodationApplicationService, AccommodationViewApplicationService accommodationViewApplicationService) {
         this.accommodationApplicationService = accommodationApplicationService;
+        this.accommodationViewApplicationService = accommodationViewApplicationService;
     }
 
     @GetMapping
@@ -55,6 +59,11 @@ public class AccommodationController {
     @GetMapping("/{id}")
     public ResponseEntity<DisplayAccommodationDto> findById(@PathVariable Long id) {
         return ResponseEntity.ok(accommodationApplicationService.findById(id));
+    }
+
+    @GetMapping("/views")
+    public ResponseEntity<List<DisplayAccommodationViewDto>> findViews() {
+        return ResponseEntity.ok(accommodationViewApplicationService.findAll());
     }
 
     @PostMapping("/add")
