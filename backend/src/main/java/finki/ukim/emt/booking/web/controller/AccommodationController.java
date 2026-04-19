@@ -3,6 +3,7 @@ package finki.ukim.emt.booking.web.controller;
 import finki.ukim.emt.booking.model.dto.*;
 import finki.ukim.emt.booking.model.projection.AccommodationDetailedSummaryProjection;
 import finki.ukim.emt.booking.model.projection.AccommodationSummaryProjection;
+import finki.ukim.emt.booking.service.application.AccommodationActivityLogApplicationService;
 import finki.ukim.emt.booking.service.application.AccommodationApplicationService;
 import finki.ukim.emt.booking.service.application.AccommodationViewApplicationService;
 import jakarta.validation.Valid;
@@ -17,10 +18,12 @@ import java.util.List;
 public class AccommodationController {
     private final AccommodationApplicationService accommodationApplicationService;
     private final AccommodationViewApplicationService accommodationViewApplicationService;
+    private final AccommodationActivityLogApplicationService accommodationActivityLogApplicationService;
 
-    public AccommodationController(AccommodationApplicationService accommodationApplicationService, AccommodationViewApplicationService accommodationViewApplicationService) {
+    public AccommodationController(AccommodationApplicationService accommodationApplicationService, AccommodationViewApplicationService accommodationViewApplicationService, AccommodationActivityLogApplicationService accommodationActivityLogApplicationService) {
         this.accommodationApplicationService = accommodationApplicationService;
         this.accommodationViewApplicationService = accommodationViewApplicationService;
+        this.accommodationActivityLogApplicationService = accommodationActivityLogApplicationService;
     }
 
     @GetMapping
@@ -66,6 +69,15 @@ public class AccommodationController {
     @GetMapping("/stats")
     public ResponseEntity<List<DisplayAccommodationStatsViewDto>> findStats() {
         return ResponseEntity.ok(accommodationViewApplicationService.findAllStatsViews());
+    }
+
+    @GetMapping("/activity")
+    public ResponseEntity<Page<DisplayAccommodationActivityLogDto>> findActivities(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "name") String sortBy
+    ) {
+        return ResponseEntity.ok(accommodationActivityLogApplicationService.findAll(page, size, sortBy));
     }
 
     @PostMapping("/add")

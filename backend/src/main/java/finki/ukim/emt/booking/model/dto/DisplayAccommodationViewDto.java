@@ -1,6 +1,5 @@
 package finki.ukim.emt.booking.model.dto;
 
-import finki.ukim.emt.booking.model.domain.Accommodation;
 import finki.ukim.emt.booking.model.enums.Category;
 import finki.ukim.emt.booking.model.views.AccommodationView;
 
