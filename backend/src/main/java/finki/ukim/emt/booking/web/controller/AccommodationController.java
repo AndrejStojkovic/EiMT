@@ -1,9 +1,6 @@
 package finki.ukim.emt.booking.web.controller;
 
-import finki.ukim.emt.booking.model.dto.CreateAccommodationDto;
-import finki.ukim.emt.booking.model.dto.DisplayAccommodationDto;
-import finki.ukim.emt.booking.model.dto.DisplayAccommodationViewDto;
-import finki.ukim.emt.booking.model.dto.FilterAccommodationDto;
+import finki.ukim.emt.booking.model.dto.*;
 import finki.ukim.emt.booking.model.projection.AccommodationDetailedSummaryProjection;
 import finki.ukim.emt.booking.model.projection.AccommodationSummaryProjection;
 import finki.ukim.emt.booking.service.application.AccommodationApplicationService;
@@ -63,7 +60,12 @@ public class AccommodationController {
 
     @GetMapping("/views")
     public ResponseEntity<List<DisplayAccommodationViewDto>> findViews() {
-        return ResponseEntity.ok(accommodationViewApplicationService.findAll());
+        return ResponseEntity.ok(accommodationViewApplicationService.findAllViews());
+    }
+
+    @GetMapping("/stats")
+    public ResponseEntity<List<DisplayAccommodationStatsViewDto>> findStats() {
+        return ResponseEntity.ok(accommodationViewApplicationService.findAllStatsViews());
     }
 
     @PostMapping("/add")

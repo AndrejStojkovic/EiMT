@@ -9,19 +9,15 @@ import org.hibernate.annotations.Immutable;
 @Entity
 @Getter
 @Immutable
-@Table(name = "accommodation_view")
-public class AccommodationView {
+@Table(name = "accommodation_stats_view")
+public class AccommodationStatsView {
     @Id
-    private Long id;
-
-    private String name;
-
     @Enumerated(EnumType.STRING)
     private Category category;
 
-    private int numRooms;
+    private int totalAccommodations;
 
-    private String hostFullName;
+    private int totalRooms;
 
-    private String countryName;
+    private float averageRooms;
 }

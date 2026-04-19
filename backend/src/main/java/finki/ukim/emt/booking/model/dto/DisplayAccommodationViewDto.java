@@ -16,12 +16,12 @@ public record DisplayAccommodationViewDto(
 ) {
     public static DisplayAccommodationViewDto from(AccommodationView accommodationView) {
         return new DisplayAccommodationViewDto(
-            accommodationView.getId(),
-            accommodationView.getName(),
-            accommodationView.getCategory(),
-            accommodationView.getNumRooms(),
-            accommodationView.getHostFullName(),
-            accommodationView.getCountryName()
+                accommodationView.getId(),
+                accommodationView.getName(),
+                accommodationView.getCategory(),
+                accommodationView.getNumRooms(),
+                accommodationView.getHostFullName(),
+                accommodationView.getCountryName()
         );
     }
 
