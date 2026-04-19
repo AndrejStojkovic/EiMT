@@ -100,4 +100,9 @@ public class AccommodationController {
     public ResponseEntity<DisplayAccommodationDto> rent(@PathVariable Long id) {
         return ResponseEntity.ok(accommodationApplicationService.rent(id));
     }
+
+    @PostMapping("/unrent/{id}")
+    public ResponseEntity<DisplayAccommodationDto> unrent(@PathVariable Long id) {
+        return ResponseEntity.ok(accommodationApplicationService.unrent(id));
+    }
 }
