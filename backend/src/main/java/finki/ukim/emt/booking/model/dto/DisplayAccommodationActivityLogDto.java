@@ -8,7 +8,7 @@ import java.util.List;
 
 public record DisplayAccommodationActivityLogDto(
         Long accommodationId,
-        String name,
+        String accommodationName,
         AccommodationEventType eventType,
         LocalDateTime createdAt
 ) {

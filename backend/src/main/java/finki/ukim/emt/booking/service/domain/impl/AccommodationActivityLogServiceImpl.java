@@ -6,7 +6,6 @@ import finki.ukim.emt.booking.service.domain.AccommodationActivityLogService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,8 +17,8 @@ public class AccommodationActivityLogServiceImpl implements AccommodationActivit
     }
 
     @Override
-    public Page<AccommodationActivityLog> findAll(int page, int size, String sortBy) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+    public Page<AccommodationActivityLog> findAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
         return accommodationActivityLogRepository.findAll(pageable);
     }
 }

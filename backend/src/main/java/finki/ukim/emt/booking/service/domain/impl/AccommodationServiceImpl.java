@@ -1,7 +1,11 @@
 package finki.ukim.emt.booking.service.domain.impl;
 
+import finki.ukim.emt.booking.event.AccommodationRentedEvent;
 import finki.ukim.emt.booking.model.domain.Accommodation;
 import finki.ukim.emt.booking.model.dto.FilterAccommodationDto;
+import finki.ukim.emt.booking.model.enums.Condition;
+import finki.ukim.emt.booking.model.exception.AccommodationInGoodConditionException;
+import finki.ukim.emt.booking.model.exception.AccommodationIsRentedException;
 import finki.ukim.emt.booking.model.exception.AccommodationNotAvailableException;
 import finki.ukim.emt.booking.model.exception.ResourceNotFoundException;
 import finki.ukim.emt.booking.model.projection.AccommodationDetailedSummaryProjection;
@@ -9,6 +13,8 @@ import finki.ukim.emt.booking.model.projection.AccommodationSummaryProjection;
 import finki.ukim.emt.booking.repository.AccommodationRepository;
 import finki.ukim.emt.booking.service.domain.AccommodationService;
 import finki.ukim.emt.booking.specification.AccommodationSpecification;
+import jakarta.transaction.Transactional;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,9 +27,11 @@ import java.util.List;
 @Service
 public class AccommodationServiceImpl implements AccommodationService {
     private final AccommodationRepository accommodationRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
-    public AccommodationServiceImpl(AccommodationRepository accommodationRepository) {
+    public AccommodationServiceImpl(AccommodationRepository accommodationRepository, ApplicationEventPublisher applicationEventPublisher) {
         this.accommodationRepository = accommodationRepository;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @Override
@@ -72,11 +80,21 @@ public class AccommodationServiceImpl implements AccommodationService {
     public Accommodation delete(Long id) {
         Accommodation accommodation = accommodationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Accommodation with id %d not found!", id)));
+
+        if(accommodation.getRented()) {
+            throw new AccommodationIsRentedException(accommodation.getId());
+        }
+
+        if(accommodation.getCondition() == Condition.GOOD) {
+            throw new AccommodationInGoodConditionException(accommodation.getId());
+        }
+
         accommodationRepository.delete(accommodation);
         return accommodation;
     }
 
     @Override
+    @Transactional
     public Accommodation rent(Long id) {
         Accommodation accommodation = accommodationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Accommodation with id %d is not found!", id)));
@@ -85,7 +103,9 @@ public class AccommodationServiceImpl implements AccommodationService {
             throw new AccommodationNotAvailableException(id);
         }
         accommodation.setRented(true);
-        return accommodationRepository.save(accommodation);
+        Accommodation updated = accommodationRepository.save(accommodation);
+        applicationEventPublisher.publishEvent(new AccommodationRentedEvent(updated));
+        return updated;
     }
 
     @Override

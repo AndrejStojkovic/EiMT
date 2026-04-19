@@ -15,8 +15,8 @@ public class AccommodationActivityLogApplicationServiceImpl implements Accommoda
     }
 
     @Override
-    public Page<DisplayAccommodationActivityLogDto> findAll(int page, int size, String sortBy) {
-        return accommodationActivityLogService.findAll(page, size, sortBy)
+    public Page<DisplayAccommodationActivityLogDto> findAll(int page, int size) {
+        return accommodationActivityLogService.findAll(page, size)
                 .map(DisplayAccommodationActivityLogDto::from);
     }
 }

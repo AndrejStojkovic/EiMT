@@ -21,7 +21,7 @@ public class AccommodationActivityLog extends BaseAuditableEntity {
     private AccommodationEventType eventType;
 
     public AccommodationActivityLog(Long accommodationId, String accommodationName, AccommodationEventType eventType) {
-        this.accommodationId = accommodationId;;
+        this.accommodationId = accommodationId;
         this.accommodationName = accommodationName;
         this.eventType = eventType;
     }

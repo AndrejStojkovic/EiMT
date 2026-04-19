@@ -1,5 +1,7 @@
 package finki.ukim.emt.booking.web.handler;
 
+import finki.ukim.emt.booking.model.exception.AccommodationInGoodConditionException;
+import finki.ukim.emt.booking.model.exception.AccommodationIsRentedException;
 import finki.ukim.emt.booking.model.exception.AccommodationNotAvailableException;
 import finki.ukim.emt.booking.model.exception.ResourceNotFoundException;
 import finki.ukim.emt.booking.web.dto.ApiError;
@@ -24,6 +26,26 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AccommodationNotAvailableException.class)
     public ResponseEntity<ApiError> handleNotAvailable(AccommodationNotAvailableException exception) {
+        ApiError error = new ApiError(
+                HttpStatus.CONFLICT.value(),
+                exception.getMessage(),
+                LocalDateTime.now()
+        );
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+    @ExceptionHandler(AccommodationInGoodConditionException.class)
+    public ResponseEntity<ApiError> handleAccommodationInGoodCondition(AccommodationInGoodConditionException exception) {
+        ApiError error = new ApiError(
+                HttpStatus.CONFLICT.value(),
+                exception.getMessage(),
+                LocalDateTime.now()
+        );
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+    @ExceptionHandler(AccommodationIsRentedException.class)
+    public ResponseEntity<ApiError> handleAccommodationIsRented(AccommodationIsRentedException exception) {
         ApiError error = new ApiError(
                 HttpStatus.CONFLICT.value(),
                 exception.getMessage(),
