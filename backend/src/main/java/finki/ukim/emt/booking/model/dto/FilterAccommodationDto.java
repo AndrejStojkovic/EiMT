@@ -6,6 +6,6 @@ public record FilterAccommodationDto(
         Category category,
         Long hostId,
         Long hostCountryId,
-        int numRooms,
+        Integer numRooms,
         Boolean available
 ) {}
