@@ -2,6 +2,7 @@ package finki.ukim.emt.booking.web.controller;
 
 import finki.ukim.emt.booking.model.dto.CreateHostDto;
 import finki.ukim.emt.booking.model.dto.DisplayHostDto;
+import finki.ukim.emt.booking.model.projection.HostSummaryProjection;
 import finki.ukim.emt.booking.service.application.HostApplicationService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,11 @@ public class HostController {
     @GetMapping
     public ResponseEntity<List<DisplayHostDto>> findAll() {
         return ResponseEntity.ok(hostApplicationService.findAll());
+    }
+
+    @GetMapping("/summary")
+    public ResponseEntity<List<HostSummaryProjection>> findAllSummaryProjections() {
+        return ResponseEntity.ok(hostApplicationService.findAllSummaryProjections());
     }
 
     @GetMapping("/{id}")

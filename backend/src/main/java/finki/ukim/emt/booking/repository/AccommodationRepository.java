@@ -23,24 +23,24 @@ public interface AccommodationRepository extends JpaRepository<Accommodation, Lo
     List<Accommodation> findAccommodationByRented(Boolean rented);
 
     @Query("""
-        select a.id as id,
-            a.name as name,
-            a.category as category,
-            a.numRooms as numRooms,
-            concat(a.host.name, ' ', a.host.surname) as hostFullName,
-            a.host.country.name as hostCountryName
-        from Accommodation a
+        SELECT a.id AS id,
+            a.name AS name,
+            a.category AS category,
+            a.numRooms AS numRooms,
+            CONCAT(a.host.name, ' ', a.host.surname) AS hostFullName,
+            a.host.country.name AS hostCountryName
+        FROM Accommodation a
     """)
     List<AccommodationSummaryProjection> findAllSummaryProjections();
 
     @Query("""
-        select a.id as id,
-           a.name as name,
-           a.category as category,
-           a.numRooms as numRooms,
-           concat(a.host.name, ' ', a.host.surname) as hostFullName,
-           a.host.country.name as hostCountryName
-        from Accommodation a
+        SELECT a.id AS id,
+           a.name AS name,
+           a.category AS category,
+           a.numRooms AS numRooms,
+           CONCAT(a.host.name, ' ', a.host.surname) AS hostFullName,
+           a.host.country.name AS hostCountryName
+        FROM Accommodation a
     """)
     List<AccommodationDetailedSummaryProjection> findAllDetailedSummaryProjections();
 }

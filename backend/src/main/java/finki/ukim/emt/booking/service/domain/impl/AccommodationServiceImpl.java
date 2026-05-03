@@ -102,7 +102,14 @@ public class AccommodationServiceImpl implements AccommodationService {
         if(accommodation.getRented()) {
             throw new AccommodationNotAvailableException(id);
         }
-        accommodation.setRented(true);
+
+        int newNumRooms = accommodation.getNumRooms() - 1;
+        accommodation.setNumRooms(newNumRooms);
+
+        if(newNumRooms == 0) {
+            accommodation.setRented(true);
+        }
+
         Accommodation updated = accommodationRepository.save(accommodation);
         applicationEventPublisher.publishEvent(new AccommodationRentedEvent(updated));
         return updated;

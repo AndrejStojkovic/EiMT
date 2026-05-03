@@ -29,10 +29,19 @@ public class AccommodationRentedEventListener {
             return;
         }
 
-        log.info("[ASYNC - thread: {}] Accommodation rented '{} ({}) - has no free rooms'.",
+        log.info("[ASYNC - thread: {}] Accommodation rented '{} ({})' - {} rooms.",
                 Thread.currentThread().getName(),
                 accommodation.getName(),
-                accommodation.getId());
+                accommodation.getId(),
+                accommodation.getNumRooms());
+
+        if(accommodation.getRented())
+        {
+            log.warn("[ASYNC - thread: {}] Accommodation '{} ({})' - has no free rooms!.",
+                    Thread.currentThread().getName(),
+                    accommodation.getName(),
+                    accommodation.getId());
+        }
 
         accommodationActivityLogRepository.save(new AccommodationActivityLog(
                 accommodation.getId(),

@@ -2,6 +2,7 @@ package finki.ukim.emt.booking.service.domain.impl;
 
 import finki.ukim.emt.booking.model.domain.Host;
 import finki.ukim.emt.booking.model.exception.ResourceNotFoundException;
+import finki.ukim.emt.booking.model.projection.HostSummaryProjection;
 import finki.ukim.emt.booking.repository.HostRepository;
 import finki.ukim.emt.booking.service.domain.HostService;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,11 @@ public class HostServiceImpl implements HostService {
     @Override
     public List<Host> findAll() {
         return hostRepository.findAll();
+    }
+
+    @Override
+    public List<HostSummaryProjection> findAllSummaryProjections() {
+        return hostRepository.findAllSummaryProjections();
     }
 
     @Override
