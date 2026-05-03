@@ -5,11 +5,11 @@ const Footer = () => {
   const year = new Date().getFullYear();
 
   const footerLinkSx = {
-    color: alpha('#faf6ef', 0.72),
+    color: alpha('#e2e8f0', 0.78),
     textDecoration: 'none',
     fontSize: '0.875rem',
     transition: 'color 0.2s ease',
-    '&:hover': { color: 'secondary.light' },
+    '&:hover': { color: '#67e8f9' },
   } as const;
 
   return (
@@ -19,8 +19,8 @@ const Footer = () => {
         mt: 'auto',
         position: 'relative',
         overflow: 'hidden',
-        bgcolor: 'primary.dark',
-        color: alpha('#faf6ef', 0.85),
+        bgcolor: '#0f172a',
+        color: alpha('#e2e8f0', 0.88),
         pt: { xs: 4, md: 6 },
         pb: 3,
         '&::before': {
@@ -28,7 +28,7 @@ const Footer = () => {
           position: 'absolute',
           inset: 0,
           background:
-            'radial-gradient(ellipse 80% 120% at 100% 0%, rgba(201, 148, 60, 0.18) 0%, transparent 55%), radial-gradient(ellipse 60% 80% at 0% 100%, rgba(47, 69, 96, 0.5) 0%, transparent 50%)',
+            'radial-gradient(ellipse 90% 110% at 100% 0%, rgba(79, 70, 229, 0.28) 0%, transparent 56%), radial-gradient(ellipse 65% 85% at 0% 100%, rgba(6, 182, 212, 0.22) 0%, transparent 52%)',
           pointerEvents: 'none',
         },
       }}
@@ -41,7 +41,7 @@ const Footer = () => {
             <Divider
               flexItem
               orientation='vertical'
-              sx={{ display: { xs: 'none', sm: 'block' }, borderColor: alpha('#faf6ef', 0.12) }}
+              sx={{ display: { xs: 'none', sm: 'block' }, borderColor: alpha('#e2e8f0', 0.12) }}
             />
           }
           sx={{
@@ -53,9 +53,9 @@ const Footer = () => {
             <Typography variant='h6' sx={{ color: 'common.white', fontWeight: 700, mb: 1 }}>
               Staybook
             </Typography>
-            <Typography variant='body2' sx={{ color: alpha('#faf6ef', 0.65), lineHeight: 1.65 }}>
-              Compare stays, check availability, and book with confidence. Built for travelers who want a calm,
-              straightforward planning experience.
+            <Typography variant='body2' sx={{ color: alpha('#e2e8f0', 0.68), lineHeight: 1.65 }}>
+              Designed for modern travel planning: clear availability, clean listing details, and fast booking
+              decisions.
             </Typography>
           </Box>
 
@@ -68,7 +68,7 @@ const Footer = () => {
               textAlign: 'center',
             }}
           >
-            <Typography variant='subtitle2' sx={{ color: 'secondary.light' }}>
+            <Typography variant='subtitle2' sx={{ color: '#67e8f9' }}>
               Explore
             </Typography>
             <Link component={RouterLink} to='/' sx={footerLinkSx}>
@@ -88,7 +88,7 @@ const Footer = () => {
               textAlign: 'center',
             }}
           >
-            <Typography variant='subtitle2' sx={{ color: 'secondary.light' }}>
+            <Typography variant='subtitle2' sx={{ color: '#67e8f9' }}>
               Support
             </Typography>
             <Link href='#' sx={footerLinkSx} onClick={(e) => e.preventDefault()}>
@@ -103,14 +103,14 @@ const Footer = () => {
           </Stack>
         </Stack>
 
-        <Divider sx={{ my: 4, borderColor: alpha('#faf6ef', 0.12) }} />
+        <Divider sx={{ my: 4, borderColor: alpha('#e2e8f0', 0.12) }} />
 
         <Stack
           direction={{ xs: 'column', sm: 'row' }}
           spacing={2}
           sx={{ justifyContent: 'space-between', alignItems: { xs: 'flex-start', sm: 'center' } }}
         >
-          <Typography variant='body2' sx={{ color: alpha('#faf6ef', 0.5) }}>
+          <Typography variant='body2' sx={{ color: alpha('#e2e8f0', 0.55) }}>
             © {year} Staybook. Demo booking experience.
           </Typography>
           <Stack direction='row' sx={{ flexWrap: 'wrap', gap: 2 }}>

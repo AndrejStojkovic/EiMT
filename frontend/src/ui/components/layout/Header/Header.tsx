@@ -9,14 +9,16 @@ import {
   Divider,
   Drawer,
   IconButton,
+  ListItemIcon,
   List,
   ListItem,
   ListItemButton,
   ListItemText,
+  Paper,
   Toolbar,
   Typography,
 } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
+import { alpha, useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useState } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router';
@@ -44,7 +46,7 @@ const Header = () => {
   };
 
   const drawer = (
-    <Box onClick={handleDrawerToggle} sx={{ textAlign: 'left', pt: 1 }}>
+    <Box onClick={handleDrawerToggle} sx={{ textAlign: 'left', pt: 1.5 }}>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', px: 2, pb: 1 }}>
         <Typography variant='h6' component='span' sx={{ fontWeight: 700, color: 'primary.main' }}>
           Staybook
@@ -54,7 +56,7 @@ const Header = () => {
         </IconButton>
       </Box>
       <Divider />
-      <List>
+      <List sx={{ px: 1, py: 1 }}>
         {navItems.map((item) => (
           <ListItem key={item.to} disablePadding>
             <ListItemButton
@@ -62,13 +64,18 @@ const Header = () => {
               to={item.to}
               selected={isActive(item.to)}
               sx={{
+                borderRadius: 1.25,
+                mb: 0.5,
                 '&.Mui-selected': {
-                  bgcolor: 'primary.main',
-                  color: 'primary.contrastText',
-                  '&:hover': { bgcolor: 'primary.dark' },
+                  bgcolor: (t) => t.palette.action.selected,
+                  color: 'primary.main',
+                  '&:hover': { bgcolor: (t) => t.palette.action.selected },
                 },
               }}
             >
+              <ListItemIcon sx={{ minWidth: 30, color: 'inherit' }}>
+                <TravelExploreRoundedIcon fontSize='small' />
+              </ListItemIcon>
               <ListItemText primary={item.label} slotProps={{ primary: { sx: { fontWeight: 600 } } }} />
             </ListItemButton>
           </ListItem>
@@ -83,14 +90,14 @@ const Header = () => {
       color='default'
       elevation={0}
       sx={{
-        borderBottom: 2,
-        borderColor: 'secondary.light',
-        bgcolor: (t) => t.palette.background.paper,
-        boxShadow: '0 12px 40px rgba(28, 45, 65, 0.06)',
+        borderBottom: 1,
+        borderColor: 'divider',
+        bgcolor: (t) => alpha(t.palette.background.paper, 0.88),
+        boxShadow: '0 8px 30px rgba(15, 23, 42, 0.08)',
       }}
     >
       <Container maxWidth='lg'>
-        <Toolbar disableGutters sx={{ minHeight: { xs: 56, sm: 64 }, gap: 2 }}>
+        <Toolbar disableGutters sx={{ minHeight: { xs: 64, sm: 72 }, gap: 2 }}>
           <Box
             component={RouterLink}
             to='/'
@@ -103,19 +110,49 @@ const Header = () => {
               mr: 'auto',
             }}
           >
-            <TravelExploreRoundedIcon sx={{ fontSize: 34, color: 'secondary.dark' }} />
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', lineHeight: 1.2 }}>
-              <Typography variant='h6' component='span' sx={{ fontWeight: 700, letterSpacing: '-0.03em' }}>
+            <Paper
+              elevation={0}
+              sx={{
+                width: 42,
+                height: 42,
+                borderRadius: 1.25,
+                display: 'grid',
+                placeItems: 'center',
+                bgcolor: (t) => alpha(t.palette.primary.main, 0.12),
+                color: 'primary.main',
+              }}
+            >
+              <TravelExploreRoundedIcon sx={{ fontSize: 24 }} />
+            </Paper>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+                justifyContent: 'center',
+                lineHeight: 1,
+                gap: 0.15,
+              }}
+            >
+              <Typography
+                variant='h6'
+                component='span'
+                sx={{ fontWeight: 700, letterSpacing: '-0.03em', lineHeight: 1.05 }}
+              >
                 Staybook
               </Typography>
-              <Typography variant='caption' color='text.secondary' sx={{ display: { xs: 'none', sm: 'block' } }}>
-                Curated places to stay
+              <Typography
+                variant='caption'
+                color='text.secondary'
+                sx={{ display: { xs: 'none', sm: 'block' }, lineHeight: 1.1 }}
+              >
+                Book smarter, travel easier
               </Typography>
             </Box>
           </Box>
 
           {isMdUp ? (
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               {navItems.map((item) => (
                 <Button
                   key={item.to}
@@ -123,13 +160,18 @@ const Header = () => {
                   to={item.to}
                   color={isActive(item.to) ? 'primary' : 'inherit'}
                   variant={isActive(item.to) ? 'contained' : 'text'}
-                  sx={{ px: 2 }}
+                  sx={{
+                    px: 2,
+                    ...(isActive(item.to)
+                      ? {}
+                      : { color: 'text.secondary', '&:hover': { color: 'text.primary' } }),
+                  }}
                 >
                   {item.label}
                 </Button>
               ))}
-              <Button variant='outlined' color='secondary' sx={{ ml: 1, borderWidth: 2 }}>
-                Sign in
+              <Button variant='contained' color='secondary' sx={{ ml: 0.5 }}>
+                Start booking
               </Button>
             </Box>
           ) : (

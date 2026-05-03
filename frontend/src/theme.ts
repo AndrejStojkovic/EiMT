@@ -1,95 +1,75 @@
 import { alpha, createTheme } from '@mui/material/styles';
 
-const ink = '#1c2d41';
-const inkLight = '#2f4560';
-const honey = '#c9943c';
-const honeyLight = '#e4b86a';
-const honeyDark = '#9a7028';
-const sand = '#f3efe6';
-const paper = '#fffcf7';
+const indigo = '#4f46e5';
+const cyan = '#06b6d4';
+const slate = '#0f172a';
 
 export const appTheme = createTheme({
   palette: {
+    mode: 'light',
     primary: {
-      main: ink,
-      light: inkLight,
-      dark: '#121f2e',
-      contrastText: '#faf6ef',
+      main: indigo,
+      dark: '#3730a3',
+      light: '#818cf8',
+      contrastText: '#ffffff',
     },
     secondary: {
-      main: honey,
-      light: honeyLight,
-      dark: honeyDark,
-      contrastText: '#1a140c',
+      main: cyan,
+      dark: '#0891b2',
+      light: '#67e8f9',
+      contrastText: '#082f49',
+    },
+    success: {
+      main: '#16a34a',
+    },
+    warning: {
+      main: '#f97316',
     },
     error: {
-      main: '#b44a40',
+      main: '#dc2626',
     },
     background: {
-      default: sand,
-      paper,
+      default: '#f3f7ff',
+      paper: '#ffffff',
     },
     text: {
-      primary: '#1e1a16',
-      secondary: '#5c564c',
+      primary: slate,
+      secondary: '#334155',
     },
-    divider: alpha('#1c2d41', 0.12),
+    divider: alpha(slate, 0.12),
     action: {
-      hover: alpha(ink, 0.06),
-      selected: alpha(ink, 0.1),
+      hover: alpha(indigo, 0.08),
+      selected: alpha(indigo, 0.12),
     },
   },
   typography: {
-    fontFamily: '"DM Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
-    h1: {
-      fontFamily: '"Fraunces", Georgia, "Times New Roman", serif',
-      fontWeight: 600,
-      letterSpacing: '-0.02em',
-    },
-    h2: {
-      fontFamily: '"Fraunces", Georgia, "Times New Roman", serif',
-      fontWeight: 600,
-      letterSpacing: '-0.02em',
-    },
-    h3: {
-      fontFamily: '"Fraunces", Georgia, "Times New Roman", serif',
-      fontWeight: 600,
-      letterSpacing: '-0.02em',
-    },
-    h4: {
-      fontFamily: '"Fraunces", Georgia, "Times New Roman", serif',
-      fontWeight: 600,
-      letterSpacing: '-0.02em',
-    },
-    h5: {
-      fontFamily: '"Fraunces", Georgia, "Times New Roman", serif',
-      fontWeight: 600,
-      letterSpacing: '-0.02em',
-    },
-    h6: {
-      fontFamily: '"Fraunces", Georgia, "Times New Roman", serif',
-      fontWeight: 600,
-      letterSpacing: '-0.02em',
-    },
+    fontFamily: '"Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif',
+    h1: { fontFamily: '"Manrope", "Plus Jakarta Sans", sans-serif', fontWeight: 700, letterSpacing: '-0.03em' },
+    h2: { fontFamily: '"Manrope", "Plus Jakarta Sans", sans-serif', fontWeight: 700, letterSpacing: '-0.02em' },
+    h3: { fontFamily: '"Manrope", "Plus Jakarta Sans", sans-serif', fontWeight: 700, letterSpacing: '-0.02em' },
+    h4: { fontFamily: '"Manrope", "Plus Jakarta Sans", sans-serif', fontWeight: 700, letterSpacing: '-0.02em' },
+    h5: { fontFamily: '"Manrope", "Plus Jakarta Sans", sans-serif', fontWeight: 700, letterSpacing: '-0.02em' },
+    h6: { fontFamily: '"Manrope", "Plus Jakarta Sans", sans-serif', fontWeight: 700, letterSpacing: '-0.01em' },
     subtitle2: {
-      fontWeight: 600,
-      letterSpacing: '0.12em',
+      fontWeight: 700,
+      letterSpacing: '0.08em',
       textTransform: 'uppercase',
-      fontSize: '0.68rem',
+      fontSize: '0.72rem',
     },
     button: {
-      fontWeight: 600,
-      letterSpacing: '0.02em',
+      fontWeight: 700,
+      textTransform: 'none',
+      letterSpacing: '0.01em',
     },
   },
   shape: {
-    borderRadius: 12,
+    borderRadius: 8,
   },
   components: {
     MuiCssBaseline: {
       styleOverrides: {
         body: {
-          scrollbarColor: `${alpha(ink, 0.25)} transparent`,
+          scrollbarColor: `${alpha(indigo, 0.35)} transparent`,
         },
       },
     },
@@ -99,27 +79,8 @@ export const appTheme = createTheme({
       },
       styleOverrides: {
         root: {
-          textTransform: 'none',
-          borderRadius: 999,
-          paddingInline: 1.5,
-          '&.MuiButton-containedPrimary': {
-            boxShadow: 'none',
-            '&:hover': {
-              boxShadow: '0px 4px 14px rgba(28, 45, 65, 0.25)',
-            },
-          },
-          '&.MuiButton-containedSecondary': {
-            color: '#1a140c',
-            '&:hover': {
-              boxShadow: `0px 4px 14px ${alpha(honeyDark, 0.35)}`,
-            },
-          },
-          '&.MuiButton-outlined': {
-            borderWidth: 2,
-            '&:hover': {
-              borderWidth: 2,
-            },
-          },
+          borderRadius: 10,
+          paddingInline: 18,
         },
       },
     },
@@ -127,6 +88,7 @@ export const appTheme = createTheme({
       styleOverrides: {
         root: {
           backgroundImage: 'none',
+          backdropFilter: 'blur(8px)',
         },
       },
     },
@@ -134,6 +96,20 @@ export const appTheme = createTheme({
       styleOverrides: {
         root: {
           backgroundImage: 'none',
+        },
+      },
+    },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          border: `1px solid ${alpha(slate, 0.08)}`,
+        },
+      },
+    },
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          fontWeight: 600,
         },
       },
     },

@@ -12,7 +12,7 @@ const Layout = () => {
         minHeight: '100vh',
         bgcolor: 'background.default',
         backgroundImage: (t) =>
-          `linear-gradient(165deg, ${t.palette.background.default} 0%, ${alpha(t.palette.secondary.main, 0.06)} 38%, ${t.palette.background.default} 72%)`,
+          `radial-gradient(circle at 10% 20%, ${alpha(t.palette.primary.light, 0.16)} 0%, transparent 28%), radial-gradient(circle at 92% 15%, ${alpha(t.palette.secondary.main, 0.12)} 0%, transparent 24%), linear-gradient(180deg, ${t.palette.background.default} 0%, #eef4ff 100%)`,
       }}
     >
       <Header />
@@ -22,10 +22,10 @@ const Layout = () => {
         sx={{
           flex: '1 1 auto',
           width: '100%',
-          py: { xs: 2, sm: 3 },
+          py: { xs: 3, sm: 4 },
         }}
       >
-        <Container maxWidth='lg' sx={{ px: { xs: 2, sm: 3 } }}>
+        <Container maxWidth='lg' sx={{ px: { xs: 2, sm: 3 }, position: 'relative', zIndex: 1 }}>
           <Outlet />
         </Container>
       </Box>
