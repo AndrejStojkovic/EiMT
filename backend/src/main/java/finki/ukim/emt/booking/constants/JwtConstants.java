@@ -10,7 +10,7 @@ public class JwtConstants {
     public static String HEADER;
     public static String TOKEN_PREFIX;
 
-    @Value("${jwt.secret}")
+    @Value("${JWT_SECRET_KEY}")
     public void setSecretKey(String secretKey) {
         SECRET_KEY = secretKey;
     }
