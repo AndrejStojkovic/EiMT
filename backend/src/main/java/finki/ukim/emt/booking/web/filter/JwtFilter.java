@@ -45,8 +45,6 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         String token = headerValue.substring(JwtConstants.TOKEN_PREFIX.length() + 1);
-        System.out.println("Received header: " + headerValue);
-        System.out.println("Filtered token: " + token);
         try {
             String username = jwtHelper.extractUsername(token);
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

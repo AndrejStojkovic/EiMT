@@ -3,7 +3,7 @@ import useAccommodationDetails from '../../../hooks/useAccommodationDetails';
 import { useNavigate, useParams, Link } from 'react-router';
 import { ArrowBack, Category } from '@mui/icons-material';
 
-const AccommodationsDetailsPage = () => {
+const AccommodationDetailsPage = () => {
     const navigate = useNavigate();
     const { id } = useParams();
     const { accommodationDetails } = useAccommodationDetails(id);
@@ -84,4 +84,4 @@ const AccommodationsDetailsPage = () => {
     )
 }
 
-export default AccommodationsDetailsPage;
+export default AccommodationDetailsPage;
