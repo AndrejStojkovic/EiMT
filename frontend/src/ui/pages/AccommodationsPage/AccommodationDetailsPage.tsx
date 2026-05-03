@@ -1,17 +1,41 @@
-import { alpha, Avatar, Box, Breadcrumbs, Button, Chip, CircularProgress, Grid, Paper, Stack, Typography } from '@mui/material';
+import { alpha, Alert, Avatar, Box, Breadcrumbs, Button, Chip, CircularProgress, Grid, Paper, Stack, Typography } from '@mui/material';
 import useAccommodationDetails from '../../../hooks/accommodation/useAccommodationDetails';
+import useHostDetails from '../../../hooks/host/useHostDetails';
+import useCountryDetails from '../../../hooks/country/useCountryDetails';
 import { useNavigate, useParams, Link } from 'react-router';
-import { ArrowBack, Category } from '@mui/icons-material';
+import { ArrowBack, Category, PersonRounded, Public } from '@mui/icons-material';
 
 const AccommodationDetailsPage = () => {
     const navigate = useNavigate();
     const { id } = useParams();
-    const { accommodationDetails } = useAccommodationDetails(id);
+    const { accommodationDetails, loading, error } = useAccommodationDetails(id);
+    const { hostDetails, loading: hostLoading, error: hostError } = useHostDetails(
+        accommodationDetails ? String(accommodationDetails.host_id) : undefined,
+    );
+    const { countryDetails } = useCountryDetails(
+        hostDetails ? String(hostDetails.country_id) : undefined,
+    );
 
-    if (!accommodationDetails) {
+    if (loading) {
         return (
             <Box sx={{ display: 'grid', placeItems: 'center', minHeight: 280 }}>
                 <CircularProgress />
+            </Box>
+        );
+    }
+
+    if (error) {
+        return (
+            <Box sx={{ py: 2 }}>
+                <Alert severity='error' role='alert'>{error.message}</Alert>
+            </Box>
+        );
+    }
+
+    if (!accommodationDetails) {
+        return (
+            <Box sx={{ py: 2 }}>
+                <Alert severity='warning'>Accommodation not found.</Alert>
             </Box>
         );
     }
@@ -76,6 +100,44 @@ const AccommodationDetailsPage = () => {
                                     variant='outlined'
                                     sx={{ px: 0.5 }}
                                 />
+                            </Stack>
+
+                            <Stack spacing={1.5} sx={{ mt: 1 }}>
+                                <Typography variant='subtitle2' color='text.secondary' sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
+                                    <PersonRounded fontSize='small' aria-hidden />
+                                    Host
+                                </Typography>
+                                <Stack direction='row' spacing={1} flexWrap='wrap' useFlexGap alignItems='center'>
+                                    {hostLoading && <CircularProgress size={22} aria-label='Loading host' />}
+                                    {hostError && (
+                                        <Typography variant='body2' color='error'>
+                                            Could not load host details.
+                                        </Typography>
+                                    )}
+                                    <Button
+                                        component={Link}
+                                        to={`/hosts/${accommodationDetails.host_id}`}
+                                        variant='outlined'
+                                        size='medium'
+                                        sx={{ textTransform: 'none', fontWeight: 600 }}
+                                    >
+                                        {hostDetails
+                                            ? `${hostDetails.name} ${hostDetails.surname}`.trim()
+                                            : 'View host profile'}
+                                    </Button>
+                                    {hostDetails && (
+                                        <Button
+                                            component={Link}
+                                            to={`/countries/${hostDetails.country_id}`}
+                                            variant='text'
+                                            size='medium'
+                                            startIcon={<Public fontSize='small' />}
+                                            sx={{ textTransform: 'none', fontWeight: 600 }}
+                                        >
+                                            {countryDetails ? countryDetails.name : 'Country'}
+                                        </Button>
+                                    )}
+                                </Stack>
                             </Stack>
                         </Box>
                     </Grid>

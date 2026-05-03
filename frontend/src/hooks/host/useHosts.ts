@@ -12,7 +12,15 @@ const useHosts = () => {
             setLoading(true);
             try {
                 const response = await hostApi.findAll();
-                setHosts(response.data);
+                const list = response.data.map((h) => {
+                    const x = h as Host & { countryId?: number };
+                    const country_id = x.country_id ?? x.countryId;
+                    if (country_id === undefined) {
+                        return { ...x, country_id: 0 };
+                    }
+                    return { ...x, country_id };
+                });
+                setHosts(list);
                 setError(null);
             } catch (err) {
                 setError(err instanceof Error ? err : new Error('An error has occured while loading hosts!'));

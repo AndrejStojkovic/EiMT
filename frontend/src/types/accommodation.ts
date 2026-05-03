@@ -1,6 +1,5 @@
 import { Category } from "./enums/category"
 import { Condition } from "./enums/condition"
-import type { Host } from "./host"
 
 export interface Accommodation {
     id: number,
@@ -14,7 +13,7 @@ export interface AccommodationDetails {
     id: number,
     name: string,
     category: Category
-    host: Host,
+    host_id: number,
     condition: Condition,
     numRooms: number,
     rented: boolean

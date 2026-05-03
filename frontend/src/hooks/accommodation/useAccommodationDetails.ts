@@ -9,14 +9,20 @@ const useAccommodationDetails = (id?: string) => {
 
     useEffect(() => {
         const loadData = async () => {
-            if(!id) {
+            if (!id) {
+                setLoading(false);
                 return;
             }
 
             setLoading(true);
             try {
                 const response = await accommodationApi.findById(id);
-                setAccommodationDetails(response.data);
+                const d = response.data as AccommodationDetails & { hostId?: number };
+                const host_id = d.host_id ?? d.hostId;
+                if (host_id === undefined) {
+                    throw new Error('Accommodation response is missing host id.');
+                }
+                setAccommodationDetails({ ...d, host_id });
                 setError(null);
             } catch (err) {
                 setError(err instanceof Error ? err : new Error('An error has occured while loading accommodation details!'));

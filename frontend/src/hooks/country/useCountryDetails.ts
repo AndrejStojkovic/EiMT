@@ -9,7 +9,8 @@ const useCountryDetails = (id?: string) => {
 
     useEffect(() => {
         const loadData = async () => {
-            if(!id) {
+            if (!id) {
+                setLoading(false);
                 return;
             }
 

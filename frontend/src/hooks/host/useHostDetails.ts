@@ -9,14 +9,20 @@ const useHostDetails = (id?: string) => {
 
     useEffect(() => {
         const loadData = async () => {
-            if(!id) {
+            if (!id) {
+                setLoading(false);
                 return;
             }
 
             setLoading(true);
             try {
                 const response = await hostApi.findById(id);
-                setHostDetails(response.data);
+                const h = response.data as Host & { countryId?: number };
+                const country_id = h.country_id ?? h.countryId;
+                if (country_id === undefined) {
+                    throw new Error('Host response is missing country id.');
+                }
+                setHostDetails({ ...h, country_id });
                 setError(null);
             } catch (err) {
                 setError(err instanceof Error ? err : new Error('An error has occured while loading host details!'));
