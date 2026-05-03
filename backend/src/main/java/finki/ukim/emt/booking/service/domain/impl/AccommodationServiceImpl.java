@@ -2,7 +2,7 @@ package finki.ukim.emt.booking.service.domain.impl;
 
 import finki.ukim.emt.booking.event.AccommodationRentedEvent;
 import finki.ukim.emt.booking.model.domain.Accommodation;
-import finki.ukim.emt.booking.model.dto.FilterAccommodationDto;
+import finki.ukim.emt.booking.model.dto.accommodations.FilterAccommodationDto;
 import finki.ukim.emt.booking.model.enums.Condition;
 import finki.ukim.emt.booking.model.exception.AccommodationInGoodConditionException;
 import finki.ukim.emt.booking.model.exception.AccommodationIsRentedException;

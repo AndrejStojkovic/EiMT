@@ -1,7 +1,7 @@
 package finki.ukim.emt.booking.service.domain;
 
 import finki.ukim.emt.booking.model.domain.Accommodation;
-import finki.ukim.emt.booking.model.dto.FilterAccommodationDto;
+import finki.ukim.emt.booking.model.dto.accommodations.FilterAccommodationDto;
 import finki.ukim.emt.booking.model.projection.AccommodationDetailedSummaryProjection;
 import finki.ukim.emt.booking.model.projection.AccommodationSummaryProjection;
 import org.springframework.data.domain.Page;

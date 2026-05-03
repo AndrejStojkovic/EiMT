@@ -1,6 +1,11 @@
 package finki.ukim.emt.booking.web.controller;
 
-import finki.ukim.emt.booking.model.dto.*;
+import finki.ukim.emt.booking.model.dto.accommodations.CreateAccommodationDto;
+import finki.ukim.emt.booking.model.dto.accommodations.DisplayAccommodationDto;
+import finki.ukim.emt.booking.model.dto.accommodations.FilterAccommodationDto;
+import finki.ukim.emt.booking.model.dto.stats.DisplayAccommodationActivityLogDto;
+import finki.ukim.emt.booking.model.dto.stats.DisplayAccommodationStatsViewDto;
+import finki.ukim.emt.booking.model.dto.views.DisplayAccommodationViewDto;
 import finki.ukim.emt.booking.model.projection.AccommodationDetailedSummaryProjection;
 import finki.ukim.emt.booking.model.projection.AccommodationSummaryProjection;
 import finki.ukim.emt.booking.service.application.AccommodationActivityLogApplicationService;

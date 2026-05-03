@@ -1,7 +1,7 @@
 package finki.ukim.emt.booking.service.application;
 
-import finki.ukim.emt.booking.model.dto.CreateCountryDto;
-import finki.ukim.emt.booking.model.dto.DisplayCountryDto;
+import finki.ukim.emt.booking.model.dto.countries.CreateCountryDto;
+import finki.ukim.emt.booking.model.dto.countries.DisplayCountryDto;
 
 import java.util.List;
 

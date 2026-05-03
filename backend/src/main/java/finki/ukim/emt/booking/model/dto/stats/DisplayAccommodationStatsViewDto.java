@@ -1,4 +1,4 @@
-package finki.ukim.emt.booking.model.dto;
+package finki.ukim.emt.booking.model.dto.stats;
 
 import finki.ukim.emt.booking.model.enums.Category;
 import finki.ukim.emt.booking.model.views.AccommodationStatsView;

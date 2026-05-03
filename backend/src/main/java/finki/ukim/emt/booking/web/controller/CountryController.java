@@ -1,7 +1,7 @@
 package finki.ukim.emt.booking.web.controller;
 
-import finki.ukim.emt.booking.model.dto.CreateCountryDto;
-import finki.ukim.emt.booking.model.dto.DisplayCountryDto;
+import finki.ukim.emt.booking.model.dto.countries.CreateCountryDto;
+import finki.ukim.emt.booking.model.dto.countries.DisplayCountryDto;
 import finki.ukim.emt.booking.service.application.CountryApplicationService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;

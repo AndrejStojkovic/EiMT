@@ -1,6 +1,6 @@
 package finki.ukim.emt.booking.service.application.impl;
 
-import finki.ukim.emt.booking.model.dto.DisplayAccommodationActivityLogDto;
+import finki.ukim.emt.booking.model.dto.stats.DisplayAccommodationActivityLogDto;
 import finki.ukim.emt.booking.service.application.AccommodationActivityLogApplicationService;
 import finki.ukim.emt.booking.service.domain.AccommodationActivityLogService;
 import org.springframework.data.domain.Page;

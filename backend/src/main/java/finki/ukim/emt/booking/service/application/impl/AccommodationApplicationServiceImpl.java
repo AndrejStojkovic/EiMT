@@ -2,9 +2,9 @@ package finki.ukim.emt.booking.service.application.impl;
 
 import finki.ukim.emt.booking.model.domain.Accommodation;
 import finki.ukim.emt.booking.model.domain.Host;
-import finki.ukim.emt.booking.model.dto.CreateAccommodationDto;
-import finki.ukim.emt.booking.model.dto.DisplayAccommodationDto;
-import finki.ukim.emt.booking.model.dto.FilterAccommodationDto;
+import finki.ukim.emt.booking.model.dto.accommodations.CreateAccommodationDto;
+import finki.ukim.emt.booking.model.dto.accommodations.DisplayAccommodationDto;
+import finki.ukim.emt.booking.model.dto.accommodations.FilterAccommodationDto;
 import finki.ukim.emt.booking.model.projection.AccommodationDetailedSummaryProjection;
 import finki.ukim.emt.booking.model.projection.AccommodationSummaryProjection;
 import finki.ukim.emt.booking.service.application.AccommodationApplicationService;

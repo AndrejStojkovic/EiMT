@@ -1,4 +1,4 @@
-package finki.ukim.emt.booking.model.dto;
+package finki.ukim.emt.booking.model.dto.hosts;
 
 import finki.ukim.emt.booking.model.domain.Host;
 

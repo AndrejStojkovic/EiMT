@@ -1,7 +1,7 @@
 package finki.ukim.emt.booking.specification;
 
 import finki.ukim.emt.booking.model.domain.Accommodation;
-import finki.ukim.emt.booking.model.dto.FilterAccommodationDto;
+import finki.ukim.emt.booking.model.dto.accommodations.FilterAccommodationDto;
 import finki.ukim.emt.booking.model.enums.Category;
 import org.springframework.data.jpa.domain.Specification;
 

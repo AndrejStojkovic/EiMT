@@ -1,7 +1,7 @@
 package finki.ukim.emt.booking.service.application.impl;
 
-import finki.ukim.emt.booking.model.dto.DisplayAccommodationStatsViewDto;
-import finki.ukim.emt.booking.model.dto.DisplayAccommodationViewDto;
+import finki.ukim.emt.booking.model.dto.stats.DisplayAccommodationStatsViewDto;
+import finki.ukim.emt.booking.model.dto.views.DisplayAccommodationViewDto;
 import finki.ukim.emt.booking.service.application.AccommodationViewApplicationService;
 import finki.ukim.emt.booking.service.domain.AccommodationStatsViewService;
 import finki.ukim.emt.booking.service.domain.AccommodationViewService;

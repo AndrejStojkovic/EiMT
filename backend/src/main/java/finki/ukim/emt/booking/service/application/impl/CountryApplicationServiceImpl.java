@@ -1,7 +1,7 @@
 package finki.ukim.emt.booking.service.application.impl;
 
-import finki.ukim.emt.booking.model.dto.CreateCountryDto;
-import finki.ukim.emt.booking.model.dto.DisplayCountryDto;
+import finki.ukim.emt.booking.model.dto.countries.CreateCountryDto;
+import finki.ukim.emt.booking.model.dto.countries.DisplayCountryDto;
 import finki.ukim.emt.booking.service.application.CountryApplicationService;
 import finki.ukim.emt.booking.service.domain.CountryService;
 import org.springframework.stereotype.Service;

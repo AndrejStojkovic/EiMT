@@ -1,7 +1,7 @@
 package finki.ukim.emt.booking.service.application;
 
-import finki.ukim.emt.booking.model.dto.CreateHostDto;
-import finki.ukim.emt.booking.model.dto.DisplayHostDto;
+import finki.ukim.emt.booking.model.dto.hosts.CreateHostDto;
+import finki.ukim.emt.booking.model.dto.hosts.DisplayHostDto;
 import finki.ukim.emt.booking.model.projection.HostSummaryProjection;
 
 import java.util.List;

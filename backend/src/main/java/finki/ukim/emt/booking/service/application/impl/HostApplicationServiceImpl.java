@@ -1,8 +1,8 @@
 package finki.ukim.emt.booking.service.application.impl;
 
 import finki.ukim.emt.booking.model.domain.Country;
-import finki.ukim.emt.booking.model.dto.CreateHostDto;
-import finki.ukim.emt.booking.model.dto.DisplayHostDto;
+import finki.ukim.emt.booking.model.dto.hosts.CreateHostDto;
+import finki.ukim.emt.booking.model.dto.hosts.DisplayHostDto;
 import finki.ukim.emt.booking.model.projection.HostSummaryProjection;
 import finki.ukim.emt.booking.service.application.HostApplicationService;
 import finki.ukim.emt.booking.service.domain.CountryService;
