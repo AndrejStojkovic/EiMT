@@ -84,7 +84,7 @@ const AccommodationCard = ({ accommodation }: AccommodationCardProps) => {
         }}
         aria-label={`View details for ${accommodation.name}`}
       >
-        <Stack alignItems='center' spacing={0.75}>
+        <Stack spacing={0.75} sx={{ alignItems: 'center' }}>
           <HotelRoundedIcon sx={{ fontSize: 52, color: alpha('#fff', 0.95) }} aria-hidden />
           <Typography variant='subtitle2' sx={{ color: alpha('#fff', 0.9), letterSpacing: '0.1em' }}>
             STAYBOOK SELECT
@@ -93,7 +93,11 @@ const AccommodationCard = ({ accommodation }: AccommodationCardProps) => {
       </CardMedia>
 
       <CardContent sx={{ flex: '1 1 auto', pt: 2.25, pb: 1.25, px: 2.25 }}>
-        <Stack direction='row' justifyContent='space-between' alignItems='flex-start' gap={1} sx={{ mb: 1.25 }}>
+        <Stack
+          direction='row'
+          spacing={1}
+          sx={{ mb: 1.25, justifyContent: 'space-between', alignItems: 'flex-start' }}
+        >
           <Typography
             component='h3'
             variant='h6'
@@ -122,35 +126,38 @@ const AccommodationCard = ({ accommodation }: AccommodationCardProps) => {
           </IconButton>
         </Stack>
 
-        <Stack direction='row' alignItems='center' gap={0.5} sx={{ color: 'text.secondary', mb: 1.5 }}>
+        <Stack direction='row' spacing={0.5} sx={{ color: 'text.secondary', mb: 1.5, alignItems: 'center' }}>
           <LocationOnRoundedIcon fontSize='small' />
           <Typography variant='body2'>Featured destination</Typography>
         </Stack>
 
-        <Stack direction='row' useFlexGap sx={{ gap: 0.75, mb: 2, justifyContent: 'flex-start', flexWrap: 'wrap' }}>
+        <Stack direction='row' spacing={0.75} sx={{ mb: 2, justifyContent: 'flex-start', flexWrap: 'wrap' }}>
           <Chip
             size='small'
             label={`${accommodation.numRooms} ${accommodation.numRooms === 1 ? 'room' : 'rooms'}`}
             variant='outlined'
             sx={{ fontWeight: 500, borderColor: 'divider' }}
           />
-          <Chip
-            size='small'
-            label={hasLowInventory ? 'Almost sold out!' : 'Good availability'}
-            color={hasLowInventory ? 'error' : 'success'}
-            variant='outlined'
-            sx={{ fontWeight: 500 }}
-          />
+          {accommodation.numRooms > 0 &&
+            <Chip
+              size='small'
+              label={hasLowInventory ? 'Almost sold out!' : 'Good availability'}
+              color={hasLowInventory ? 'error' : 'success'}
+              variant='outlined'
+              sx={{ fontWeight: 500 }}
+            />
+          }
+          
         </Stack>
 
         <Chip
           size='medium'
           label={availabilityLabel}
-          color={accommodation.rented ? 'default' : 'success'}
+          color={accommodation.rented ? 'success' : 'success'}
           sx={{
             fontWeight: 600,
             ...(accommodation.rented
-              ? { bgcolor: (t) => alpha(t.palette.text.primary, 0.06) }
+              ? { bgcolor: (t) => alpha(t.palette.error.main, 1) }
               : {}),
           }}
         />
