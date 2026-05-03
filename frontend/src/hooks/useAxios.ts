@@ -7,4 +7,6 @@ export const useAxios = axios.create({
     }
 });
 
-export const Token = `Bearer ${process.env.TOKEN}`;
+export const axiosHeaders = {
+    'Authorization': `Bearer ${process.env.TOKEN}`
+};

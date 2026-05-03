@@ -1,5 +1,5 @@
 import { Box, CircularProgress } from '@mui/material';
-import useAccommodations from '../../../hooks/useAccommodations';
+import useAccommodations from '../../../hooks/accommodation/useAccommodations';
 import AccommodationGrid from '../../components/accommodation/AccommodationGrid';
 
 const AccommodationsPage = () => {

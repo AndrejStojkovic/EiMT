@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import accommodationApi from '../api/accommodationApi';
-import type { Accommodation } from '../types/accommodation';
+import accommodationApi from '../../api/accommodationApi';
+import type { Accommodation } from '../../types/accommodation';
 
 const useAccommodations = () => {
     const [accommodations, setAccommodations] = useState<Accommodation[]>([]);
@@ -24,7 +24,7 @@ const useAccommodations = () => {
         loadData();
     }, []);
 
-    return { accommodations, loading, error, fetch };
+    return { accommodations, loading, error };
 }
 
 export default useAccommodations;

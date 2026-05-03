@@ -11,8 +11,10 @@ function App() {
       <Routes>
         <Route path='/' element={<Layout />}>
           <Route index element={<HomePage />} />
-          <Route path='/accommodations' element={<AccommodationsPage />} />
-          <Route path='/accommodation/:id' element={<AccommodationDetailsPage />} />
+        </Route>
+        <Route path='/accommodations' element={<Layout />}>
+          <Route index element={<AccommodationsPage />} />
+          <Route path='/accommodations/:id' element={<AccommodationDetailsPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

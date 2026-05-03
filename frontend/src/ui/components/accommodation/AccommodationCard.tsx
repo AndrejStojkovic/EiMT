@@ -23,7 +23,7 @@ const AccommodationCard = ({ accommodation }: AccommodationCardProps) => {
             <CardActions sx={{ justifyContent: 'space-between' }}>
                 <Button
                     startIcon={<InfoIcon />}
-                    onClick={() => navigate(`/accommodation/${accommodation.id}`)}
+                    onClick={() => navigate(`/accommodations/${accommodation.id}`)}
                 >
                     Info
                 </Button>

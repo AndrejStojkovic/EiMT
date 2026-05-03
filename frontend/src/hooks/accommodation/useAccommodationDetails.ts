@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import accommodationApi from '../api/accommodationApi';
-import type { AccommodationDetails } from '../types/accommodation';
+import accommodationApi from '../../api/accommodationApi';
+import type { AccommodationDetails } from '../../types/accommodation';
 
 const useAccommodationDetails = (id?: string) => {
     const [accommodationDetails, setAccommodationDetails] = useState<AccommodationDetails | null>(null);

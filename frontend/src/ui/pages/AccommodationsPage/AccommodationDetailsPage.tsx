@@ -1,5 +1,5 @@
 import { Avatar, Box, Breadcrumbs, Button, Chip, CircularProgress, Grid, Paper, Stack, Typography } from '@mui/material';
-import useAccommodationDetails from '../../../hooks/useAccommodationDetails';
+import useAccommodationDetails from '../../../hooks/accommodation/useAccommodationDetails';
 import { useNavigate, useParams, Link } from 'react-router';
 import { ArrowBack, Category } from '@mui/icons-material';
 
