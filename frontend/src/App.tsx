@@ -3,6 +3,7 @@ import Layout from './ui/components/layout/Layout/Layout';
 import HomePage from './ui/pages/HomePage/HomePage';
 import AccommodationsPage from './ui/pages/AccommodationsPage/AccommodationsPage';
 import AccommodationDetailsPage from './ui/pages/AccommodationsPage/AccommodationDetailsPage';
+import AccommodationEventsPage from './ui/pages/AccommodationsPage/AccommodationEventsPage';
 import HostDetailsPage from './ui/pages/HostDetailsPage/HostDetailsPage';
 import CountryDetailsPage from './ui/pages/CountryDetailsPage/CountryDetailsPage';
 import HostsPage from './ui/pages/HostsPage/HostsPage';
@@ -17,6 +18,7 @@ function App() {
           <Route path='accommodations'>
             <Route index element={<AccommodationsPage />} />
             <Route path=':id' element={<AccommodationDetailsPage />} />
+            <Route path='activity' element={<AccommodationEventsPage />} />
           </Route>
           <Route path='hosts'>
             <Route index element={<HostsPage />} />

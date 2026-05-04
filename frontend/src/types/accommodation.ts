@@ -1,5 +1,6 @@
-import { Category } from "./enums/category"
-import { Condition } from "./enums/condition"
+import { Category } from './enums/category';
+import { Condition } from './enums/condition';
+import { EventType } from './enums/eventType';
 
 export interface Accommodation {
     id: number,
@@ -18,3 +19,17 @@ export interface AccommodationDetails {
     numRooms: number,
     rented: boolean
 }
+
+export interface AccommodationEvent {
+    id: number,
+    name: string,
+    type: EventType,
+    createdAt: Date
+}
+
+export type AccommodationEventDto = {
+    accommodationId: number;
+    accommodationName: string;
+    eventType: string;
+    createdAt: string;
+};

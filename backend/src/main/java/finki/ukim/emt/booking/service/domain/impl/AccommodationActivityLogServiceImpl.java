@@ -8,6 +8,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AccommodationActivityLogServiceImpl implements AccommodationActivityLogService {
     private final AccommodationActivityLogRepository accommodationActivityLogRepository;
@@ -20,5 +22,10 @@ public class AccommodationActivityLogServiceImpl implements AccommodationActivit
     public Page<AccommodationActivityLog> findAll(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return accommodationActivityLogRepository.findAll(pageable);
+    }
+
+    @Override
+    public List<AccommodationActivityLog> findAll() {
+        return accommodationActivityLogRepository.findAll();
     }
 }

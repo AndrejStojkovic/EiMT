@@ -84,6 +84,11 @@ public class AccommodationController {
         return ResponseEntity.ok(accommodationActivityLogApplicationService.findAll(page, size));
     }
 
+    @GetMapping("/activity/all")
+    public ResponseEntity<List<DisplayAccommodationActivityLogDto>> findAllActivities() {
+        return ResponseEntity.ok(accommodationActivityLogApplicationService.findAll());
+    }
+
     @PostMapping("/add")
     public ResponseEntity<DisplayAccommodationDto> create(@RequestBody @Valid CreateAccommodationDto createAccommodationDto) {
         return ResponseEntity.ok(accommodationApplicationService.create(createAccommodationDto));
