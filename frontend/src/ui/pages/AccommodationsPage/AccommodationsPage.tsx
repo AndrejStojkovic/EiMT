@@ -6,11 +6,13 @@ import accommodationApi from '../../../api/accommodationApi';
 import hostApi from '../../../api/hostApi';
 import useAccommodations from '../../../hooks/accommodation/useAccommodations';
 import { useAuth } from '../../../hooks/useAuth';
+import { Category } from '../../../types/enums/category';
+import { Condition } from '../../../types/enums/condition';
 import type { Accommodation, CreateAccommodationDto, EditAccommodationDto } from '../../../types/accommodation';
 import type { Host } from '../../../types/host';
 import AccommodationGrid from '../../components/accommodation/AccommodationGrid';
 import DeleteAccommodationModal from '../../components/accommodation/modals/DeleteAccommodationModal';
-import AccommodationUpsertModal from '../../components/accommodation/modals/AccommodationUpsertModal';
+import AddOrEditAccommodationModal from '../../components/accommodation/modals/AddOrEditAccommodationModal';
 
 const getApiErrorMessage = (error: unknown, fallback: string) => {
   if (error instanceof AxiosError) {
@@ -22,13 +24,31 @@ const getApiErrorMessage = (error: unknown, fallback: string) => {
   return fallback;
 };
 
+const mapEnumValue = <T extends Record<string, string | number>>(
+  enumType: T,
+  rawValue: unknown,
+): number | undefined => {
+  if (typeof rawValue === 'number') {
+    return rawValue;
+  }
+
+  if (typeof rawValue === 'string') {
+    const enumValue = enumType[rawValue];
+    if (typeof enumValue === 'number') {
+      return enumValue;
+    }
+  }
+
+  return undefined;
+};
+
 const AccommodationsPage = () => {
   const { accommodations, loading, error, refetch } = useAccommodations();
   const { user } = useAuth();
   const [hosts, setHosts] = useState<Host[]>([]);
   const [loadingHosts, setLoadingHosts] = useState(false);
   const [hostsErrorMessage, setHostsErrorMessage] = useState<string | null>(null);
-  const [upsertOpen, setUpsertOpen] = useState(false);
+  const [addOrEditOpen, setAddOrEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [accommodationToDelete, setAccommodationToDelete] = useState<Accommodation | null>(null);
   const [accommodationToEdit, setAccommodationToEdit] = useState<EditAccommodationDto | null>(null);
@@ -37,6 +57,7 @@ const AccommodationsPage = () => {
   const [loadingEditDetails, setLoadingEditDetails] = useState(false);
   const [actionErrorMessage, setActionErrorMessage] = useState<string | null>(null);
   const [modalErrorMessage, setModalErrorMessage] = useState<string | null>(null);
+
   const availableCount = accommodations.filter((accommodation) => !accommodation.rented).length;
   const canManageAccommodations = Boolean(user?.roles.includes('ROLE_ADMINISTRATOR'));
 
@@ -63,7 +84,7 @@ const AccommodationsPage = () => {
     setAccommodationToEdit(null);
     setModalErrorMessage(null);
     setActionErrorMessage(null);
-    setUpsertOpen(true);
+    setAddOrEditOpen(true);
   };
 
   const openEditModal = async (accommodation: Accommodation) => {
@@ -72,13 +93,28 @@ const AccommodationsPage = () => {
     setActionErrorMessage(null);
     try {
       const detailsResponse = await accommodationApi.findById(String(accommodation.id));
-      const details = detailsResponse.data as EditAccommodationDto & { hostId?: number };
-      const host_id = details.host_id ?? details.hostId;
-      if (host_id === undefined) {
+      const details = detailsResponse.data as EditAccommodationDto & {
+        host_id?: number;
+        category?: unknown;
+        condition?: unknown;
+      };
+      const hostId = details.hostId ?? details.host_id;
+      const category = mapEnumValue(Category, details.category);
+      const condition = mapEnumValue(Condition, details.condition);
+      if (hostId === undefined) {
         throw new Error('Accommodation response is missing host id.');
       }
-      setAccommodationToEdit({ ...details, id: accommodation.id, host_id });
-      setUpsertOpen(true);
+      if (category === undefined || condition === undefined) {
+        throw new Error('Accommodation response is missing category or condition.');
+      }
+      setAccommodationToEdit({
+        ...details,
+        id: accommodation.id,
+        hostId,
+        category,
+        condition,
+      });
+      setAddOrEditOpen(true);
     } catch (err) {
       setActionErrorMessage(getApiErrorMessage(err, 'Could not load accommodation details for editing.'));
     } finally {
@@ -86,16 +122,16 @@ const AccommodationsPage = () => {
     }
   };
 
-  const closeUpsertModal = () => {
+  const closeAddOrEditModal = () => {
     if (saving) {
       return;
     }
-    setUpsertOpen(false);
+    setAddOrEditOpen(false);
     setAccommodationToEdit(null);
     setModalErrorMessage(null);
   };
 
-  const handleUpsert = async (data: CreateAccommodationDto | EditAccommodationDto) => {
+  const handleAddOrEdit = async (data: CreateAccommodationDto | EditAccommodationDto) => {
     setSaving(true);
     setModalErrorMessage(null);
     try {
@@ -104,7 +140,7 @@ const AccommodationsPage = () => {
       } else {
         await accommodationApi.create(data);
       }
-      setUpsertOpen(false);
+      setAddOrEditOpen(false);
       setAccommodationToEdit(null);
       await refetch();
     } catch (err) {
@@ -216,15 +252,15 @@ const AccommodationsPage = () => {
         />
       )}
 
-      <AccommodationUpsertModal
-        open={upsertOpen}
+      <AddOrEditAccommodationModal
+        open={addOrEditOpen}
         hosts={hosts}
         loadingHosts={loadingHosts}
         saving={saving || loadingEditDetails}
         errorMessage={modalErrorMessage}
         initialAccommodation={accommodationToEdit}
-        onClose={closeUpsertModal}
-        onSubmit={handleUpsert}
+        onClose={closeAddOrEditModal}
+        onSubmit={handleAddOrEdit}
       />
       <DeleteAccommodationModal
         open={deleteOpen}

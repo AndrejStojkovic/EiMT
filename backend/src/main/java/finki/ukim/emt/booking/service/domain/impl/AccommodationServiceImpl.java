@@ -72,7 +72,9 @@ public class AccommodationServiceImpl implements AccommodationService {
         existingAccommodation.setName(accommodation.getName());
         existingAccommodation.setCategory(accommodation.getCategory());
         existingAccommodation.setHost(accommodation.getHost());
+        existingAccommodation.setCondition(accommodation.getCondition());
         existingAccommodation.setNumRooms(accommodation.getNumRooms());
+        existingAccommodation.setRented(accommodation.getRented());
         return accommodationRepository.save(existingAccommodation);
     }
 

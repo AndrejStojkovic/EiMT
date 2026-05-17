@@ -27,9 +27,10 @@ interface AccommodationCardProps {
   accommodation: Accommodation;
   onEdit?: (accommodation: Accommodation) => void;
   onDelete?: (accommodation: Accommodation) => void;
+  isAdmin: boolean;
 }
 
-const AccommodationCard = ({ accommodation, onEdit, onDelete }: AccommodationCardProps) => {
+const AccommodationCard = ({ accommodation, onEdit, onDelete, isAdmin }: AccommodationCardProps) => {
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
   const menuOpen = Boolean(menuAnchor);
   const detailPath = `/accommodations/${accommodation.id}`;
@@ -89,7 +90,7 @@ const AccommodationCard = ({ accommodation, onEdit, onDelete }: AccommodationCar
         <Stack spacing={0.75} sx={{ alignItems: 'center' }}>
           <HotelRoundedIcon sx={{ fontSize: 52, color: alpha('#fff', 0.95) }} aria-hidden />
           <Typography variant='subtitle2' sx={{ color: alpha('#fff', 0.9), letterSpacing: '0.1em' }}>
-            STAYBOOK SELECT
+            STAYBOOK
           </Typography>
         </Stack>
       </CardMedia>
@@ -179,7 +180,7 @@ const AccommodationCard = ({ accommodation, onEdit, onDelete }: AccommodationCar
         </Button>
       </CardActions>
 
-      <Menu
+      {isAdmin && (<Menu
         id='accommodation-card-menu'
         anchorEl={menuAnchor}
         open={menuOpen}
@@ -216,6 +217,7 @@ const AccommodationCard = ({ accommodation, onEdit, onDelete }: AccommodationCar
           <ListItemText primary='Remove' />
         </MenuItem>
       </Menu>
+      )}
     </Card>
   );
 };

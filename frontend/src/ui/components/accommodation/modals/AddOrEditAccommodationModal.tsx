@@ -33,7 +33,7 @@ type AccommodationFormData = {
   rented: boolean;
 };
 
-interface AccommodationUpsertModalProps {
+interface AddOrEditAccommodationModalProps {
   open: boolean;
   hosts: Host[];
   loadingHosts: boolean;
@@ -56,7 +56,7 @@ const getConditionLabel = (value: number) =>
     .replaceAll('_', ' ')
     .replace(/\b\w/g, (char) => char.toUpperCase());
 
-const AccommodationUpsertModal = ({
+const AddOrEditAccommodationModal = ({
   open,
   hosts,
   loadingHosts,
@@ -65,7 +65,7 @@ const AccommodationUpsertModal = ({
   initialAccommodation,
   onClose,
   onSubmit,
-}: AccommodationUpsertModalProps) => {
+}: AddOrEditAccommodationModalProps) => {
   const isEditMode = Boolean(initialAccommodation);
   const [formData, setFormData] = useState<AccommodationFormData>({
     name: '',
@@ -86,7 +86,7 @@ const AccommodationUpsertModal = ({
         setFormData({
           name: initialAccommodation.name,
           category: initialAccommodation.category,
-          host_id: initialAccommodation.host_id,
+          host_id: initialAccommodation.hostId,
           condition: initialAccommodation.condition,
           numRooms: initialAccommodation.numRooms,
           rented: initialAccommodation.rented,
@@ -124,7 +124,7 @@ const AccommodationUpsertModal = ({
       ...formData,
       name: formData.name.trim(),
       numRooms: Number(formData.numRooms),
-      host_id: Number(formData.host_id),
+      hostId: Number(formData.host_id),
     };
 
     if (isEditMode && initialAccommodation) {
@@ -241,7 +241,7 @@ const AccommodationUpsertModal = ({
               disabled={saving}
             />
             <Typography variant='body2' color='text.secondary'>
-              Mark this accommodation as currently rented.
+              Is currently rented?
             </Typography>
           </Stack>
         </Stack>
@@ -263,4 +263,4 @@ const AccommodationUpsertModal = ({
   );
 };
 
-export default AccommodationUpsertModal;
+export default AddOrEditAccommodationModal;

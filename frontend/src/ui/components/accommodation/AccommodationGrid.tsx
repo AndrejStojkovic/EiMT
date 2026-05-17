@@ -1,6 +1,7 @@
 import { Grid } from '@mui/material';
 import AccommodationCard from './AccommodationCard';
 import type { Accommodation } from '../../../types/accommodation';
+import { useAuth } from '../../../hooks/useAuth';
 
 interface AccommodationGridProps {
   accommodations: Accommodation[];
@@ -9,6 +10,9 @@ interface AccommodationGridProps {
 }
 
 const AccommodationGrid = ({ accommodations, onEditAccommodation, onDeleteAccommodation }: AccommodationGridProps) => {
+  const { user } = useAuth();
+  const isAdmin = Boolean(user?.roles.includes('ROLE_ADMINISTRATOR'));
+
   if (accommodations.length === 0) {
     return null;
   }
@@ -31,6 +35,7 @@ const AccommodationGrid = ({ accommodations, onEditAccommodation, onDeleteAccomm
             accommodation={accommodation}
             onEdit={onEditAccommodation}
             onDelete={onDeleteAccommodation}
+            isAdmin={isAdmin}
           />
         </Grid>
       ))}

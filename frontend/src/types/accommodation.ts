@@ -13,7 +13,7 @@ export interface Accommodation {
 export interface CreateAccommodationDto {
     name: string;
     category: Category;
-    host_id: number;
+    hostId: number;
     condition: Condition;
     numRooms: number;
     rented: boolean;
@@ -23,7 +23,7 @@ export interface EditAccommodationDto {
     id: number;
     name: string;
     category: Category;
-    host_id: number;
+    hostId: number;
     condition: Condition;
     numRooms: number;
     rented: boolean;
