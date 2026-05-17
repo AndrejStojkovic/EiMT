@@ -48,13 +48,13 @@ const getCategoryLabel = (value: number) =>
   Category[value]
     .toLowerCase()
     .replaceAll('_', ' ')
-    .replace(/\b\w/g, (char) => char.toUpperCase());
+    .replace(/^./, (char) => char.toUpperCase());
 
 const getConditionLabel = (value: number) =>
   Condition[value]
     .toLowerCase()
     .replaceAll('_', ' ')
-    .replace(/\b\w/g, (char) => char.toUpperCase());
+    .replace(/^./, (char) => char.toUpperCase());
 
 const AddOrEditAccommodationModal = ({
   open,

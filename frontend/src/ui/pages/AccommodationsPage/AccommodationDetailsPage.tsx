@@ -6,6 +6,12 @@ import { useNavigate, useParams, Link } from 'react-router';
 import { ArrowBack, Category, PersonRounded, Public } from '@mui/icons-material';
 import type { MouseEvent as ReactMouseEvent } from 'react';
 
+const toSentenceCaseLabel = (value: string) =>
+    value
+        .toLowerCase()
+        .replaceAll('_', ' ')
+        .replace(/^./, (char) => char.toUpperCase());
+
 const AccommodationDetailsPage = () => {
     const navigate = useNavigate();
     const { id } = useParams();
@@ -98,13 +104,13 @@ const AccommodationDetailsPage = () => {
                                     color={accommodationDetails.rented ? 'default' : 'success'}
                                 />
                                 <Chip
-                                    label={`${accommodationDetails.condition} condition`}
+                                    label={`${toSentenceCaseLabel(accommodationDetails.condition)} condition`}
                                     color='info'
                                     variant='outlined'
                                 />
                                 <Chip
                                     icon={<Category />}
-                                    label={accommodationDetails.category}
+                                    label={toSentenceCaseLabel(accommodationDetails.category)}
                                     color='primary'
                                     variant='outlined'
                                     sx={{ px: 0.5 }}
