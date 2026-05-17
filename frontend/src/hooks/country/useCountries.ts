@@ -28,13 +28,12 @@ const useCountries = () => {
             }
             setError(err instanceof Error ? err : new Error('An error has occured while loading countries!'));
         } finally {
-            if (!isMountedRef.current) {
-                return;
-            }
-            if (isInitialLoad) {
-                setLoading(false);
-            } else {
-                setIsRefreshing(false);
+            if (isMountedRef.current) {
+                if (isInitialLoad) {
+                    setLoading(false);
+                } else {
+                    setIsRefreshing(false);
+                }
             }
         }
     }, []);
@@ -45,9 +44,12 @@ const useCountries = () => {
 
     useEffect(() => {
         isMountedRef.current = true;
-        void loadData(true);
+        const timeoutId = window.setTimeout(() => {
+            void loadData(true);
+        }, 0);
 
         return () => {
+            window.clearTimeout(timeoutId);
             isMountedRef.current = false;
         };
     }, [loadData]);

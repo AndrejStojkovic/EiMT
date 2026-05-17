@@ -28,13 +28,12 @@ const useAccommodations = (filter: AccommodationFilterDto = {}) => {
             }
             setError(err instanceof Error ? err : new Error('An error has occurred while loading accommodations!'));
         } finally {
-            // if (!isMountedRef.current) {
-            //     return;
-            // }
-            if (isInitialLoad) {
-                setLoading(false);
-            } else {
-                setIsRefreshing(false);
+            if (isMountedRef.current) {
+                if (isInitialLoad) {
+                    setLoading(false);
+                } else {
+                    setIsRefreshing(false);
+                }
             }
         }
     }, [filter]);

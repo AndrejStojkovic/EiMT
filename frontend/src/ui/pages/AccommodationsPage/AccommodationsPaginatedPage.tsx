@@ -41,6 +41,7 @@ const AccommodationsPaginatedPage = () => {
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(10);
   const isMountedRef = useRef(true);
+  const hasLoadedPageRef = useRef(false);
   const pageSizeOptions = [5, 10, 25, 50, 100] as const;
 
   useEffect(() => {
@@ -73,7 +74,7 @@ const AccommodationsPaginatedPage = () => {
     isMountedRef.current = true;
 
     const loadAccommodations = async () => {
-      if (accommodationsPage === null) {
+      if (!hasLoadedPageRef.current) {
         setLoading(true);
       } else {
         setIsRefreshing(true);
@@ -90,6 +91,7 @@ const AccommodationsPaginatedPage = () => {
           return;
         }
         setAccommodationsPage(response.data);
+        hasLoadedPageRef.current = true;
         setError(null);
       } catch (err) {
         if (!isMountedRef.current) {
@@ -97,11 +99,10 @@ const AccommodationsPaginatedPage = () => {
         }
         setError(getApiErrorMessage(err, 'Could not load paginated accommodations.'));
       } finally {
-        if (!isMountedRef.current) {
-          return;
+        if (isMountedRef.current) {
+          setLoading(false);
+          setIsRefreshing(false);
         }
-        setLoading(false);
-        setIsRefreshing(false);
       }
     };
 

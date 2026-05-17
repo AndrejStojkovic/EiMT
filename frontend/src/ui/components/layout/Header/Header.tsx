@@ -26,7 +26,7 @@ import {
 } from '@mui/material';
 import { alpha, useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { MouseEvent as ReactMouseEvent } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router';
 import { formatRole } from '../../../../helpers/formatRole';
@@ -40,7 +40,7 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { label: 'Home', to: '/', needsAuth: false },
-  { label: 'Stays', to: '/accommodations' , needsAuth: true},
+  { label: 'Accommodations', to: '/accommodations' , needsAuth: true},
   { label: 'Hosts', to: '/hosts' , needsAuth: true},
   { label: 'Countries', to: '/countries' , needsAuth: true},
 ];
@@ -53,6 +53,7 @@ const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isProfilePopoverOpen, setIsProfilePopoverOpen] = useState(false);
   const [profileAnchorEl, setProfileAnchorEl] = useState<HTMLElement | null>(null);
+  const isProfilePopperOpen = isProfilePopoverOpen && !!profileAnchorEl;
   const primaryRole = formatRole(user?.roles?.[0]);
   const displayRoles = user?.roles?.length ? user.roles : ['ROLE_USER'];
 
@@ -90,6 +91,14 @@ const Header = () => {
   const closeProfilePopover = () => {
     setIsProfilePopoverOpen(false);
   };
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setIsProfilePopoverOpen(false);
+      setProfileAnchorEl(null);
+    }
+  }, [isLoggedIn]);
 
   const handleTriggerMouseLeave = (event: ReactMouseEvent<HTMLDivElement>) => {
     const relatedTarget = event.relatedTarget as Element | null;
@@ -340,7 +349,7 @@ const Header = () => {
                       </Box>
                     </Box>
                   <Popper
-                    open={isProfilePopoverOpen}
+                    open={isProfilePopperOpen}
                     anchorEl={profileAnchorEl}
                     placement='bottom-end'
                     disablePortal
@@ -397,7 +406,11 @@ const Header = () => {
                             ))}
                           </Box>
                           <Button
-                            onClick={logout}
+                            onClick={() => {
+                              closeProfilePopover();
+                              setProfileAnchorEl(null);
+                              logout();
+                            }}
                             fullWidth
                             variant='outlined'
                             startIcon={<LogoutRoundedIcon />}

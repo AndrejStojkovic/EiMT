@@ -4,6 +4,7 @@ import useHostDetails from '../../../hooks/host/useHostDetails';
 import useCountryDetails from '../../../hooks/country/useCountryDetails';
 import { useNavigate, useParams, Link } from 'react-router';
 import { ArrowBack, Category, PersonRounded, Public } from '@mui/icons-material';
+import type { MouseEvent as ReactMouseEvent } from 'react';
 
 const AccommodationDetailsPage = () => {
     const navigate = useNavigate();
@@ -15,6 +16,14 @@ const AccommodationDetailsPage = () => {
     const { countryDetails } = useCountryDetails(
         hostDetails ? String(hostDetails.country_id) : undefined,
     );
+
+    const handleBreadcrumbMouseEnter = (event: ReactMouseEvent<HTMLAnchorElement>) => {
+        event.currentTarget.style.textDecoration = 'underline';
+    };
+
+    const handleBreadcrumbMouseLeave = (event: ReactMouseEvent<HTMLAnchorElement>) => {
+        event.currentTarget.style.textDecoration = 'none';
+    };
 
     if (loading) {
         return (
@@ -44,8 +53,8 @@ const AccommodationDetailsPage = () => {
         <Box>
             <Breadcrumbs aria-label='breadcrumb' sx={{ mb: 3 }}>
             <Link to='/accommodations' style={{ textDecoration: 'none', color: 'inherit' }}
-                onMouseEnter={e => (e.currentTarget.style.textDecoration = 'underline')}
-                onMouseLeave={e => (e.currentTarget.style.textDecoration = 'none')}
+                onMouseEnter={handleBreadcrumbMouseEnter}
+                onMouseLeave={handleBreadcrumbMouseLeave}
             >
                 Accommodations
             </Link>
