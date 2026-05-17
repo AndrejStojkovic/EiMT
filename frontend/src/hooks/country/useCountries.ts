@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import countryApi from '../../api/countryApi';
 import type { Country } from '../../types/country';
 
@@ -7,7 +7,6 @@ const useCountries = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
     const [error, setError] = useState<Error | null>(null);
-    const isMountedRef = useRef(true);
 
     const loadData = useCallback(async (isInitialLoad: boolean) => {
         if (isInitialLoad) {
@@ -17,23 +16,15 @@ const useCountries = () => {
         }
         try {
             const response = await countryApi.findAll();
-            if (!isMountedRef.current) {
-                return;
-            }
             setCountries(response.data);
             setError(null);
         } catch (err) {
-            if (!isMountedRef.current) {
-                return;
-            }
             setError(err instanceof Error ? err : new Error('An error has occured while loading countries!'));
         } finally {
-            if (isMountedRef.current) {
-                if (isInitialLoad) {
-                    setLoading(false);
-                } else {
-                    setIsRefreshing(false);
-                }
+            if (isInitialLoad) {
+                setLoading(false);
+            } else {
+                setIsRefreshing(false);
             }
         }
     }, []);
@@ -43,14 +34,12 @@ const useCountries = () => {
     }, [loadData]);
 
     useEffect(() => {
-        isMountedRef.current = true;
         const timeoutId = window.setTimeout(() => {
             void loadData(true);
         }, 0);
 
         return () => {
             window.clearTimeout(timeoutId);
-            isMountedRef.current = false;
         };
     }, [loadData]);
 

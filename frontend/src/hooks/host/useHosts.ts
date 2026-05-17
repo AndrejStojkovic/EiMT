@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import hostApi from '../../api/hostApi';
 import type { Host } from '../../types/host';
 
@@ -7,7 +7,6 @@ const useHosts = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
     const [error, setError] = useState<Error | null>(null);
-    const isMountedRef = useRef(true);
 
     const loadData = useCallback(async (isInitialLoad: boolean) => {
         if (isInitialLoad) {
@@ -25,23 +24,15 @@ const useHosts = () => {
                 }
                 return { ...x, country_id };
             });
-            if (!isMountedRef.current) {
-                return;
-            }
             setHosts(list);
             setError(null);
         } catch (err) {
-            if (!isMountedRef.current) {
-                return;
-            }
             setError(err instanceof Error ? err : new Error('An error has occured while loading hosts!'));
         } finally {
-            if (isMountedRef.current) {
-                if (isInitialLoad) {
-                    setLoading(false);
-                } else {
-                    setIsRefreshing(false);
-                }
+            if (isInitialLoad) {
+                setLoading(false);
+            } else {
+                setIsRefreshing(false);
             }
         }
     }, []);
@@ -51,14 +42,12 @@ const useHosts = () => {
     }, [loadData]);
 
     useEffect(() => {
-        isMountedRef.current = true;
         const timeoutId = window.setTimeout(() => {
             void loadData(true);
         }, 0);
 
         return () => {
             window.clearTimeout(timeoutId);
-            isMountedRef.current = false;
         };
     }, [loadData]);
 
