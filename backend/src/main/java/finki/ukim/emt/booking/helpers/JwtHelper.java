@@ -26,7 +26,6 @@ public class JwtHelper {
 
     private Key getSignIn() {
         byte[] keyBytes = Decoders.BASE64.decode(JwtConstants.SECRET_KEY);
-        System.out.println("JWT: " + JwtConstants.SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
@@ -79,6 +78,7 @@ public class JwtHelper {
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("username", userDetails.getUsername());
         extraClaims.put("roles", userDetails.getAuthorities());
         return buildToken(extraClaims, userDetails.getUsername(), JwtConstants.EXPIRATION_TIME);
     }
