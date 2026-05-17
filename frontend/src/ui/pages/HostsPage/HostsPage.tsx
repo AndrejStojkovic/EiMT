@@ -1,8 +1,7 @@
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import { Alert, Box, Button, CircularProgress, Stack, Typography } from '@mui/material';
 import { AxiosError } from 'axios';
-import { useMemo } from 'react';
-import { useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import hostApi from '../../../api/hostApi';
 import useHosts from '../../../hooks/host/useHosts';
 import useCountries from '../../../hooks/country/useCountries';
@@ -23,7 +22,7 @@ const getApiErrorMessage = (error: unknown, fallback: string) => {
 };
 
 const HostsPage = () => {
-  const { hosts, loading, error, refetch } = useHosts();
+  const { hosts, loading, isRefreshing, error, fetch } = useHosts();
   const { countries, loading: countriesLoading, error: countriesError } = useCountries();
   const { user } = useAuth();
   const [addOrEditOpen, setAddOrEditOpen] = useState(false);
@@ -34,8 +33,9 @@ const HostsPage = () => {
   const [deleting, setDeleting] = useState(false);
   const [actionErrorMessage, setActionErrorMessage] = useState<string | null>(null);
   const [modalErrorMessage, setModalErrorMessage] = useState<string | null>(null);
+  const editRequestIdRef = useRef(0);
 
-  const canManageHosts = Boolean(user?.roles.includes('ROLE_ADMINISTRATOR'));
+  const canManageHosts = Boolean(user?.roles?.includes('ROLE_ADMINISTRATOR'));
 
   const countryNameById = useMemo(() => {
     const m: Record<number, string> = {};
@@ -46,6 +46,7 @@ const HostsPage = () => {
   }, [countries]);
 
   const openAddModal = () => {
+    editRequestIdRef.current += 1;
     setHostToEdit(null);
     setModalErrorMessage(null);
     setActionErrorMessage(null);
@@ -53,10 +54,15 @@ const HostsPage = () => {
   };
 
   const openEditModal = async (host: Host) => {
+    const requestId = editRequestIdRef.current + 1;
+    editRequestIdRef.current = requestId;
     setModalErrorMessage(null);
     setActionErrorMessage(null);
     try {
       const response = await hostApi.findById(String(host.id));
+      if (requestId !== editRequestIdRef.current) {
+        return;
+      }
       const details = response.data as Host & { countryId?: number };
       const countryId = details.country_id ?? details.countryId;
       if (countryId === undefined) {
@@ -70,6 +76,9 @@ const HostsPage = () => {
       });
       setAddOrEditOpen(true);
     } catch (err) {
+      if (requestId !== editRequestIdRef.current) {
+        return;
+      }
       setActionErrorMessage(getApiErrorMessage(err, 'Could not load host details for editing.'));
     }
   };
@@ -78,6 +87,7 @@ const HostsPage = () => {
     if (saving) {
       return;
     }
+    editRequestIdRef.current += 1;
     setAddOrEditOpen(false);
     setHostToEdit(null);
     setModalErrorMessage(null);
@@ -94,7 +104,7 @@ const HostsPage = () => {
       }
       setAddOrEditOpen(false);
       setHostToEdit(null);
-      await refetch();
+      await fetch();
     } catch (err) {
       setModalErrorMessage(getApiErrorMessage(err, 'Host could not be saved.'));
     } finally {
@@ -128,7 +138,7 @@ const HostsPage = () => {
       await hostApi.delete(String(hostToDelete.id));
       setDeleteOpen(false);
       setHostToDelete(null);
-      await refetch();
+      await fetch();
     } catch (err) {
       setModalErrorMessage(getApiErrorMessage(err, 'Host could not be deleted.'));
     } finally {
@@ -159,6 +169,11 @@ const HostsPage = () => {
           <Button onClick={openAddModal} variant='contained' startIcon={<AddRoundedIcon />} sx={{ mt: 2 }}>
             Add host
           </Button>
+        )}
+        {isRefreshing && (
+          <Typography variant='body2' sx={{ mt: 1, color: 'text.secondary' }}>
+            Refreshing hosts...
+          </Typography>
         )}
         {!loading && !error && hosts.length > 0 && (
           <Typography variant='body2' sx={{ mt: 1.5, color: 'primary.main', fontWeight: 600 }}>

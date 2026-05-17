@@ -1,7 +1,7 @@
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import { Alert, Box, Button, CircularProgress, Stack, Typography } from '@mui/material';
 import { AxiosError } from 'axios';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import countryApi from '../../../api/countryApi';
 import useCountries from '../../../hooks/country/useCountries';
 import { useAuth } from '../../../hooks/useAuth';
@@ -21,7 +21,7 @@ const getApiErrorMessage = (error: unknown, fallback: string) => {
 };
 
 const CountriesPage = () => {
-  const { countries, loading, error, refetch } = useCountries();
+  const { countries, loading, isRefreshing, error, fetch } = useCountries();
   const { user } = useAuth();
   const [addOrEditOpen, setAddOrEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -31,10 +31,12 @@ const CountriesPage = () => {
   const [deleting, setDeleting] = useState(false);
   const [actionErrorMessage, setActionErrorMessage] = useState<string | null>(null);
   const [modalErrorMessage, setModalErrorMessage] = useState<string | null>(null);
+  const editRequestIdRef = useRef(0);
 
-  const canManageCountries = Boolean(user?.roles.includes('ROLE_ADMINISTRATOR'));
+  const canManageCountries = Boolean(user?.roles?.includes('ROLE_ADMINISTRATOR'));
 
   const openAddModal = () => {
+    editRequestIdRef.current += 1;
     setCountryToEdit(null);
     setModalErrorMessage(null);
     setActionErrorMessage(null);
@@ -42,10 +44,15 @@ const CountriesPage = () => {
   };
 
   const openEditModal = async (country: Country) => {
+    const requestId = editRequestIdRef.current + 1;
+    editRequestIdRef.current = requestId;
     setModalErrorMessage(null);
     setActionErrorMessage(null);
     try {
       const response = await countryApi.findById(String(country.id));
+      if (requestId !== editRequestIdRef.current) {
+        return;
+      }
       setCountryToEdit({
         id: country.id,
         name: response.data.name,
@@ -53,6 +60,9 @@ const CountriesPage = () => {
       });
       setAddOrEditOpen(true);
     } catch (err) {
+      if (requestId !== editRequestIdRef.current) {
+        return;
+      }
       setActionErrorMessage(getApiErrorMessage(err, 'Could not load country details for editing.'));
     }
   };
@@ -61,6 +71,7 @@ const CountriesPage = () => {
     if (saving) {
       return;
     }
+    editRequestIdRef.current += 1;
     setAddOrEditOpen(false);
     setCountryToEdit(null);
     setModalErrorMessage(null);
@@ -77,7 +88,7 @@ const CountriesPage = () => {
       }
       setAddOrEditOpen(false);
       setCountryToEdit(null);
-      await refetch();
+      await fetch();
     } catch (err) {
       setModalErrorMessage(getApiErrorMessage(err, 'Country could not be saved.'));
     } finally {
@@ -111,7 +122,7 @@ const CountriesPage = () => {
       await countryApi.delete(String(countryToDelete.id));
       setDeleteOpen(false);
       setCountryToDelete(null);
-      await refetch();
+      await fetch();
     } catch (err) {
       setModalErrorMessage(getApiErrorMessage(err, 'Country could not be deleted.'));
     } finally {
@@ -142,6 +153,11 @@ const CountriesPage = () => {
           <Button onClick={openAddModal} variant='contained' startIcon={<AddRoundedIcon />} sx={{ mt: 2 }}>
             Add country
           </Button>
+        )}
+        {isRefreshing && (
+          <Typography variant='body2' sx={{ mt: 1, color: 'text.secondary' }}>
+            Refreshing countries...
+          </Typography>
         )}
         {!loading && !error && countries.length > 0 && (
           <Typography variant='body2' sx={{ mt: 1.5, color: 'primary.main', fontWeight: 600 }}>

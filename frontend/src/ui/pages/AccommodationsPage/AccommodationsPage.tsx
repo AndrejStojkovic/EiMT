@@ -1,7 +1,7 @@
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import { Alert, Box, Button, CircularProgress, Stack, Typography } from '@mui/material';
 import { AxiosError } from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import accommodationApi from '../../../api/accommodationApi';
 import hostApi from '../../../api/hostApi';
 import useAccommodations from '../../../hooks/accommodation/useAccommodations';
@@ -43,7 +43,7 @@ const mapEnumValue = <T extends Record<string, string | number>>(
 };
 
 const AccommodationsPage = () => {
-  const { accommodations, loading, error, refetch } = useAccommodations();
+  const { accommodations, loading, isRefreshing, error, fetch } = useAccommodations();
   const { user } = useAuth();
   const [hosts, setHosts] = useState<Host[]>([]);
   const [loadingHosts, setLoadingHosts] = useState(false);
@@ -57,9 +57,10 @@ const AccommodationsPage = () => {
   const [loadingEditDetails, setLoadingEditDetails] = useState(false);
   const [actionErrorMessage, setActionErrorMessage] = useState<string | null>(null);
   const [modalErrorMessage, setModalErrorMessage] = useState<string | null>(null);
+  const editRequestIdRef = useRef(0);
 
   const availableCount = accommodations.filter((accommodation) => !accommodation.rented).length;
-  const canManageAccommodations = Boolean(user?.roles.includes('ROLE_ADMINISTRATOR'));
+  const canManageAccommodations = Boolean(user?.roles?.includes('ROLE_ADMINISTRATOR'));
 
   useEffect(() => {
     const loadHosts = async () => {
@@ -81,6 +82,8 @@ const AccommodationsPage = () => {
   }, [canManageAccommodations]);
 
   const openAddModal = () => {
+    editRequestIdRef.current += 1;
+    setLoadingEditDetails(false);
     setAccommodationToEdit(null);
     setModalErrorMessage(null);
     setActionErrorMessage(null);
@@ -88,11 +91,16 @@ const AccommodationsPage = () => {
   };
 
   const openEditModal = async (accommodation: Accommodation) => {
+    const requestId = editRequestIdRef.current + 1;
+    editRequestIdRef.current = requestId;
     setLoadingEditDetails(true);
     setModalErrorMessage(null);
     setActionErrorMessage(null);
     try {
       const detailsResponse = await accommodationApi.findById(String(accommodation.id));
+      if (requestId !== editRequestIdRef.current) {
+        return;
+      }
       const details = detailsResponse.data as EditAccommodationDto & {
         host_id?: number;
         category?: unknown;
@@ -116,16 +124,22 @@ const AccommodationsPage = () => {
       });
       setAddOrEditOpen(true);
     } catch (err) {
+      if (requestId !== editRequestIdRef.current) {
+        return;
+      }
       setActionErrorMessage(getApiErrorMessage(err, 'Could not load accommodation details for editing.'));
     } finally {
-      setLoadingEditDetails(false);
+      if (requestId === editRequestIdRef.current) {
+        setLoadingEditDetails(false);
+      }
     }
   };
 
   const closeAddOrEditModal = () => {
-    if (saving) {
+    if (saving || loadingEditDetails) {
       return;
     }
+    editRequestIdRef.current += 1;
     setAddOrEditOpen(false);
     setAccommodationToEdit(null);
     setModalErrorMessage(null);
@@ -142,7 +156,7 @@ const AccommodationsPage = () => {
       }
       setAddOrEditOpen(false);
       setAccommodationToEdit(null);
-      await refetch();
+      await fetch();
     } catch (err) {
       setModalErrorMessage(getApiErrorMessage(err, 'Accommodation could not be saved.'));
     } finally {
@@ -176,7 +190,7 @@ const AccommodationsPage = () => {
       await accommodationApi.delete(String(accommodationToDelete.id));
       setDeleteOpen(false);
       setAccommodationToDelete(null);
-      await refetch();
+      await fetch();
     } catch (err) {
       setModalErrorMessage(getApiErrorMessage(err, 'Accommodation could not be deleted.'));
     } finally {
@@ -207,6 +221,11 @@ const AccommodationsPage = () => {
           <Button onClick={openAddModal} variant='contained' startIcon={<AddRoundedIcon />} sx={{ mt: 2 }}>
             Add accommodation
           </Button>
+        )}
+        {isRefreshing && (
+          <Typography variant='body2' sx={{ mt: 1, color: 'text.secondary' }}>
+            Refreshing stays...
+          </Typography>
         )}
         {!loading && !error && accommodations.length > 0 && (
           <Typography variant='body2' sx={{ mt: 1.5, color: 'primary.main', fontWeight: 600 }}>
@@ -244,7 +263,7 @@ const AccommodationsPage = () => {
         <Alert severity='info'>No stays are listed yet. Check back soon.</Alert>
       )}
 
-      {!loading && accommodations.length > 0 && (
+      {!loading && !error && accommodations.length > 0 && (
         <AccommodationGrid
           accommodations={accommodations}
           onEditAccommodation={canManageAccommodations ? openEditModal : undefined}

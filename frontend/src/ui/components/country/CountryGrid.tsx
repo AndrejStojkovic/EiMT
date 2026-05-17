@@ -11,7 +11,7 @@ interface CountryGridProps {
 
 const CountryGrid = ({ countries, onEditCountry, onDeleteCountry }: CountryGridProps) => {
   const { user } = useAuth();
-  const isAdmin = Boolean(user?.roles.includes('ROLE_ADMINISTRATOR'));
+  const isAdmin = Boolean(user?.roles?.includes('ROLE_ADMINISTRATOR'));
 
   if (countries.length === 0) {
     return null;

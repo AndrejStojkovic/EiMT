@@ -11,7 +11,7 @@ interface AccommodationGridProps {
 
 const AccommodationGrid = ({ accommodations, onEditAccommodation, onDeleteAccommodation }: AccommodationGridProps) => {
   const { user } = useAuth();
-  const isAdmin = Boolean(user?.roles.includes('ROLE_ADMINISTRATOR'));
+  const isAdmin = Boolean(user?.roles?.includes('ROLE_ADMINISTRATOR'));
 
   if (accommodations.length === 0) {
     return null;

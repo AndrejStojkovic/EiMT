@@ -9,7 +9,7 @@ const ProtectedRoute = ({ role }: { role?: Role | null }) => {
         return <Navigate to='/login' replace/>;
     }
 
-    if(role && !user.roles.includes(role)) {
+    if(role && !user.roles?.includes(role)) {
         return <Navigate to='/login' replace/>;
     }
 

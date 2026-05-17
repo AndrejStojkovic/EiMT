@@ -12,7 +12,7 @@ interface HostGridProps {
 
 const HostGrid = ({ hosts, countryNameById, onEditHost, onDeleteHost }: HostGridProps) => {
   const { user } = useAuth();
-  const isAdmin = Boolean(user?.roles.includes('ROLE_ADMINISTRATOR'));
+  const isAdmin = Boolean(user?.roles?.includes('ROLE_ADMINISTRATOR'));
 
   if (hosts.length === 0) {
     return null;
