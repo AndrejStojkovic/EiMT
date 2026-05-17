@@ -136,7 +136,7 @@ const AccommodationsPage = () => {
     setModalErrorMessage(null);
     try {
       if ('id' in data) {
-        await accommodationApi.edit(String(data.id), data);
+        await accommodationApi.edit(data);
       } else {
         await accommodationApi.create(data);
       }

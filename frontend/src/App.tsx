@@ -25,13 +25,17 @@ function App() {
               <Route path='activity' element={<AccommodationEventsPage />} />
             </Route>
           </Route>
-          <Route path='hosts'>
-            <Route index element={<HostsPage />} />
-            <Route path=':id' element={<HostDetailsPage />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path='hosts'>
+              <Route index element={<HostsPage />} />
+              <Route path=':id' element={<HostDetailsPage />} />
+            </Route>
           </Route>
-          <Route path='countries'>
-            <Route index element={<CountriesPage />} />
-            <Route path=':id' element={<CountryDetailsPage />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path='countries'>
+              <Route index element={<CountriesPage />} />
+              <Route path=':id' element={<CountryDetailsPage />} />
+            </Route>
           </Route>
           <Route path='login' element={<LoginPage />} />
           <Route path='register' element={<RegisterPage />} />

@@ -35,6 +35,8 @@ interface NavItem {
 const navItems: NavItem[] = [
   { label: 'Home', to: '/', needsAuth: false },
   { label: 'Stays', to: '/accommodations' , needsAuth: true},
+  { label: 'Hosts', to: '/hosts' , needsAuth: true},
+  { label: 'Countries', to: '/countries' , needsAuth: true},
 ];
 
 const Header = () => {
@@ -92,7 +94,7 @@ const Header = () => {
             </ListItemButton>
           </ListItem>
         ))}
-        <Divider sx={{ my: 1 }} />
+        <Divider sx={{ mx: 2, my: 1 }} />
         {isLoggedIn ? (
           <ListItem disablePadding>
             <ListItemButton

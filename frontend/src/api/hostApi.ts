@@ -1,5 +1,5 @@
 import useAxios from '../hooks/useAxios';
-import type { Host } from '../types/host';
+import type { CreateHostDto, EditHostDto, Host } from '../types/host';
 
 const hostApi = {
     findAll: async () => {
@@ -7,6 +7,15 @@ const hostApi = {
     },
     findById: async (id: string) => {
         return await useAxios.get<Host>(`/hosts/${id}`);
+    },
+    create: async (data: CreateHostDto) => {
+        return await useAxios.post<CreateHostDto>('/hosts/add', data);
+    },
+    edit: async (data: EditHostDto) => {
+        return await useAxios.put<EditHostDto>(`/hosts/edit/${data.id}`, data);
+    },
+    delete: async (id: string) => {
+        return await useAxios.delete(`/hosts/delete/${id}`);
     }
 }
 

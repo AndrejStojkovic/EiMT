@@ -11,8 +11,8 @@ const accommodationApi = {
     create: async (data: CreateAccommodationDto) => {
         return await useAxios.post<CreateAccommodationDto>('/accommodations/add', data);
     },
-    edit: async (id: string, data: EditAccommodationDto) => {
-        return await useAxios.put<EditAccommodationDto>(`/accommodations/edit/${id}`, data);
+    edit: async (data: EditAccommodationDto) => {
+        return await useAxios.put<EditAccommodationDto>(`/accommodations/edit/${data.id}`, data);
     },
     delete: async (id: string) => {
         return await useAxios.delete(`/accommodations/delete/${id}`);
