@@ -36,11 +36,6 @@ public class User extends BaseAuditableEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-//    private boolean isAccountNonExpired = true;
-//    private boolean isAccountNonLocked = true;
-//    private boolean isCredentialsNonExpired = true;
-//    private boolean isEnabled = true;
-
     public User(String username, String password, String name, String surname, String email) {
         this.username = username;
         this.password = password;

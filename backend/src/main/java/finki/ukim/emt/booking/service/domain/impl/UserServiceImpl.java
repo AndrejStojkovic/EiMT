@@ -1,6 +1,7 @@
 package finki.ukim.emt.booking.service.domain.impl;
 
 import finki.ukim.emt.booking.model.domain.User;
+import finki.ukim.emt.booking.model.enums.Role;
 import finki.ukim.emt.booking.model.exception.IncorrectPasswordException;
 import finki.ukim.emt.booking.model.exception.UserAlreadyExistsException;
 import finki.ukim.emt.booking.model.exception.UserNotFoundException;
@@ -55,6 +56,16 @@ public class UserServiceImpl implements UserService {
             throw new IncorrectPasswordException();
         }
         return user;
+    }
+
+    @Override
+    public User setUserRole(String username, Role role) {
+        User user = userRepository.findByUsername(username);
+        if(user == null) {
+            throw new UserNotFoundException(username);
+        }
+        user.setRole(role);
+        return userRepository.save(user);
     }
 
     @Override

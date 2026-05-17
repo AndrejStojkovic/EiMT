@@ -76,7 +76,9 @@ public class JwtWebSecurityConfig {
                                         "/api/user/register",
                                         "/api/user/login",
                                         "/api/accommodations/activity",
-                                        "/api/accommodations/activity/all"
+                                        "/api/accommodations/activity/all",
+                                        "/api/debug",
+                                        "/api/debug/**"
                                 )
                                 .permitAll()
                                 .requestMatchers(

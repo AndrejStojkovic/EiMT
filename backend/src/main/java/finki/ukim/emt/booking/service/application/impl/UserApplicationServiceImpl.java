@@ -6,6 +6,7 @@ import finki.ukim.emt.booking.model.dto.users.LoginUserRequestDto;
 import finki.ukim.emt.booking.model.dto.users.LoginUserResponseDto;
 import finki.ukim.emt.booking.model.dto.users.RegisterUserRequestDto;
 import finki.ukim.emt.booking.model.dto.users.RegisterUserResponseDto;
+import finki.ukim.emt.booking.model.enums.Role;
 import finki.ukim.emt.booking.service.application.UserApplicationService;
 import finki.ukim.emt.booking.service.domain.UserService;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,12 @@ public class UserApplicationServiceImpl implements UserApplicationService {
     @Override
     public RegisterUserResponseDto findByUsername(String username) {
         User user = userService.findByUsername(username);
+        return RegisterUserResponseDto.from(user);
+    }
+
+    @Override
+    public RegisterUserResponseDto setUserRole(String username, Role role) {
+        User user = userService.setUserRole(username, role);
         return RegisterUserResponseDto.from(user);
     }
 }

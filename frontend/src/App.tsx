@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router';
+import ProtectedRoute from './ui/components/routing/ProtectedRoute';
 import Layout from './ui/components/layout/Layout/Layout';
 import HomePage from './ui/pages/HomePage/HomePage';
 import AccommodationsPage from './ui/pages/AccommodationsPage/AccommodationsPage';
@@ -17,10 +18,12 @@ function App() {
       <Routes>
         <Route path='/' element={<Layout />}>
           <Route index element={<HomePage />} />
-          <Route path='accommodations'>
-            <Route index element={<AccommodationsPage />} />
-            <Route path=':id' element={<AccommodationDetailsPage />} />
-            <Route path='activity' element={<AccommodationEventsPage />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path='accommodations'>
+              <Route index element={<AccommodationsPage />} />
+              <Route path=':id' element={<AccommodationDetailsPage />} />
+              <Route path='activity' element={<AccommodationEventsPage />} />
+            </Route>
           </Route>
           <Route path='hosts'>
             <Route index element={<HostsPage />} />
