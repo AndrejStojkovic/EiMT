@@ -6,8 +6,8 @@ import AccommodationsPage from './ui/pages/AccommodationsPage/AccommodationsPage
 import AccommodationDetailsPage from './ui/pages/AccommodationsPage/AccommodationDetailsPage';
 import AccommodationEventsPage from './ui/pages/AccommodationsPage/AccommodationEventsPage';
 import AccommodationsPaginatedPage from './ui/pages/AccommodationsPage/AccommodationsPaginatedPage';
-import HostDetailsPage from './ui/pages/HostDetailsPage/HostDetailsPage';
-import CountryDetailsPage from './ui/pages/CountryDetailsPage/CountryDetailsPage';
+import HostDetailsPage from './ui/pages/HostsPage/HostDetailsPage';
+import CountryDetailsPage from './ui/pages/CountriesPage/CountryDetailsPage';
 import HostsPage from './ui/pages/HostsPage/HostsPage';
 import CountriesPage from './ui/pages/CountriesPage/CountriesPage';
 import LoginPage from './ui/pages/AuthPage/LoginPage';

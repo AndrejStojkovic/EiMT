@@ -51,7 +51,7 @@ const CountryDetailsPage = () => {
                             {countryDetails.name}
                         </Typography>
 
-                        <Stack direction='row' spacing={1} flexWrap='wrap' useFlexGap sx={{ mb: 3 }}>
+                        <Stack direction='row' spacing={1} useFlexGap sx={{ mb: 3, flexWrap: 'wrap' }}>
                             <Chip
                                 icon={<Public />}
                                 label={countryDetails.continent}
@@ -61,7 +61,7 @@ const CountryDetailsPage = () => {
                             />
                         </Stack>
 
-                        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} alignItems={{ sm: 'center' }}>
+                        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ alignItems: { sm: 'center' } }}>
                             <Button variant='outlined' startIcon={<ArrowBack />} onClick={() => navigate('/countries')} sx={{ borderWidth: 2 }}>
                                 All countries
                             </Button>

@@ -83,7 +83,7 @@ const AccommodationDetailsPage = () => {
                                 {accommodationDetails.numRooms} room(s) available
                             </Typography>
 
-                            <Stack direction='row' spacing={1} flexWrap='wrap' useFlexGap sx={{ mb: 3 }}>
+                            <Stack direction='row' spacing={1} useFlexGap sx={{ mb: 3, flexWrap: 'wrap' }}>
                                 <Chip
                                     label={accommodationDetails.rented ? 'Booked' : 'Available'}
                                     color={accommodationDetails.rented ? 'default' : 'success'}
@@ -107,7 +107,7 @@ const AccommodationDetailsPage = () => {
                                     <PersonRounded fontSize='small' aria-hidden />
                                     Host
                                 </Typography>
-                                <Stack direction='row' spacing={1} flexWrap='wrap' useFlexGap alignItems='center'>
+                                <Stack direction='row' spacing={1} useFlexGap sx={{ flexWrap: 'wrap', alignItems: 'center' }}>
                                     {hostLoading && <CircularProgress size={22} aria-label='Loading host' />}
                                     {hostError && (
                                         <Typography variant='body2' color='error'>
