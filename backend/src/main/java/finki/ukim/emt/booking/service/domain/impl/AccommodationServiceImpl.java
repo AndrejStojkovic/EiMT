@@ -40,6 +40,12 @@ public class AccommodationServiceImpl implements AccommodationService {
     }
 
     @Override
+    public List<Accommodation> findAll(FilterAccommodationDto filter) {
+        Specification<Accommodation> specification = AccommodationSpecification.withFilters(filter);
+        return accommodationRepository.findAll(specification);
+    }
+
+    @Override
     public List<Accommodation> findAllByRented(Boolean rented) {
         return accommodationRepository.findAccommodationByRented(rented);
     }

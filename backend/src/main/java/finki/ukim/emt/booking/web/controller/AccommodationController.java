@@ -32,8 +32,8 @@ public class AccommodationController {
     }
 
     @GetMapping
-    public ResponseEntity<List<DisplayAccommodationDto>> findAll() {
-        return ResponseEntity.ok(accommodationApplicationService.findAll());
+    public ResponseEntity<List<DisplayAccommodationDto>> findAll(@ModelAttribute FilterAccommodationDto filter) {
+        return ResponseEntity.ok(accommodationApplicationService.findAll(filter));
     }
 
     @GetMapping("/paginated")

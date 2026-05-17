@@ -5,6 +5,7 @@ import HomePage from './ui/pages/HomePage/HomePage';
 import AccommodationsPage from './ui/pages/AccommodationsPage/AccommodationsPage';
 import AccommodationDetailsPage from './ui/pages/AccommodationsPage/AccommodationDetailsPage';
 import AccommodationEventsPage from './ui/pages/AccommodationsPage/AccommodationEventsPage';
+import AccommodationsPaginatedPage from './ui/pages/AccommodationsPage/AccommodationsPaginatedPage';
 import HostDetailsPage from './ui/pages/HostDetailsPage/HostDetailsPage';
 import CountryDetailsPage from './ui/pages/CountryDetailsPage/CountryDetailsPage';
 import HostsPage from './ui/pages/HostsPage/HostsPage';
@@ -21,6 +22,7 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route path='accommodations'>
               <Route index element={<AccommodationsPage />} />
+              <Route path='paginated' element={<AccommodationsPaginatedPage />} />
               <Route path=':id' element={<AccommodationDetailsPage />} />
               <Route path='activity' element={<AccommodationEventsPage />} />
             </Route>

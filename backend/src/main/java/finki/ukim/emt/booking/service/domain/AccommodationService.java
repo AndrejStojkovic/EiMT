@@ -11,6 +11,8 @@ import java.util.List;
 public interface AccommodationService {
     List<Accommodation> findAll();
 
+    List<Accommodation> findAll(FilterAccommodationDto filter);
+
     List<Accommodation> findAllByRented(Boolean rented);
 
     List<AccommodationSummaryProjection> findAllSummary();

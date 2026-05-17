@@ -1,15 +1,25 @@
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import ViewWeekRoundedIcon from '@mui/icons-material/ViewWeekRounded';
 import { Alert, Box, Button, CircularProgress, Stack, Typography } from '@mui/material';
 import { AxiosError } from 'axios';
 import { useEffect, useRef, useState } from 'react';
+import { Link as RouterLink } from 'react-router';
 import accommodationApi from '../../../api/accommodationApi';
+import countryApi from '../../../api/countryApi';
 import hostApi from '../../../api/hostApi';
+import {
+  areAccommodationFiltersEqual,
+  hasAccommodationFilters,
+  normalizeAccommodationFilter,
+} from '../../../helpers/accommodationFilters';
 import useAccommodations from '../../../hooks/accommodation/useAccommodations';
 import { useAuth } from '../../../hooks/useAuth';
+import type { Accommodation, AccommodationFilterDto, CreateAccommodationDto, EditAccommodationDto } from '../../../types/accommodation';
+import type { Country } from '../../../types/country';
 import { Category } from '../../../types/enums/category';
 import { Condition } from '../../../types/enums/condition';
-import type { Accommodation, CreateAccommodationDto, EditAccommodationDto } from '../../../types/accommodation';
 import type { Host } from '../../../types/host';
+import AccommodationFilters from '../../components/accommodation/AccommodationFilters';
 import AccommodationGrid from '../../components/accommodation/AccommodationGrid';
 import DeleteAccommodationModal from '../../components/accommodation/modals/DeleteAccommodationModal';
 import AddOrEditAccommodationModal from '../../components/accommodation/modals/AddOrEditAccommodationModal';
@@ -43,11 +53,15 @@ const mapEnumValue = <T extends Record<string, string | number>>(
 };
 
 const AccommodationsPage = () => {
-  const { accommodations, loading, isRefreshing, error, fetch } = useAccommodations();
+  const [draftFilter, setDraftFilter] = useState<AccommodationFilterDto>({});
+  const [appliedFilter, setAppliedFilter] = useState<AccommodationFilterDto>({});
+  const { accommodations, loading, isRefreshing, error, fetch } = useAccommodations(appliedFilter);
   const { user } = useAuth();
   const [hosts, setHosts] = useState<Host[]>([]);
+  const [countries, setCountries] = useState<Country[]>([]);
   const [loadingHosts, setLoadingHosts] = useState(false);
   const [hostsErrorMessage, setHostsErrorMessage] = useState<string | null>(null);
+  const [countriesErrorMessage, setCountriesErrorMessage] = useState<string | null>(null);
   const [addOrEditOpen, setAddOrEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [accommodationToDelete, setAccommodationToDelete] = useState<Accommodation | null>(null);
@@ -63,23 +77,40 @@ const AccommodationsPage = () => {
   const canManageAccommodations = Boolean(user?.roles?.includes('ROLE_ADMINISTRATOR'));
 
   useEffect(() => {
-    const loadHosts = async () => {
+    const loadFilterData = async () => {
       setLoadingHosts(true);
       try {
-        const response = await hostApi.findAll();
-        setHosts(response.data);
+        const [hostsResponse, countriesResponse] = await Promise.all([hostApi.findAll(), countryApi.findAll()]);
+        setHosts(hostsResponse.data);
+        setCountries(countriesResponse.data);
         setHostsErrorMessage(null);
+        setCountriesErrorMessage(null);
       } catch (err) {
-        setHostsErrorMessage(getApiErrorMessage(err, 'Could not load hosts for the accommodation form.'));
+        const message = getApiErrorMessage(err, 'Could not load filter and form metadata for accommodations.');
+        setHostsErrorMessage(message);
+        setCountriesErrorMessage(message);
       } finally {
         setLoadingHosts(false);
       }
     };
 
-    if (canManageAccommodations) {
-      loadHosts();
+    void loadFilterData();
+  }, []);
+
+  const applyFilters = () => {
+    const normalizedDraft = normalizeAccommodationFilter(draftFilter);
+    if (!areAccommodationFiltersEqual(appliedFilter, normalizedDraft)) {
+      setAppliedFilter(normalizedDraft);
     }
-  }, [canManageAccommodations]);
+  };
+
+  const clearFilters = () => {
+    if (!hasAccommodationFilters(draftFilter) && !hasAccommodationFilters(appliedFilter)) {
+      return;
+    }
+    setDraftFilter({});
+    setAppliedFilter({});
+  };
 
   const openAddModal = () => {
     editRequestIdRef.current += 1;
@@ -217,11 +248,16 @@ const AccommodationsPage = () => {
         <Typography variant='body1' color='text.secondary' sx={{ textAlign: 'left', maxWidth: 560 }}>
           Browse curated accommodations, compare availability, and open any listing for full details and booking info.
         </Typography>
-        {canManageAccommodations && (
-          <Button onClick={openAddModal} variant='contained' startIcon={<AddRoundedIcon />} sx={{ mt: 2 }}>
-            Add accommodation
+        <Stack direction='row' spacing={1} sx={{ mt: 2, flexWrap: 'wrap' }}>
+          {canManageAccommodations && (
+            <Button onClick={openAddModal} variant='contained' startIcon={<AddRoundedIcon />}>
+              Add accommodation
+            </Button>
+          )}
+          <Button component={RouterLink} to='/accommodations/paginated' variant='outlined' startIcon={<ViewWeekRoundedIcon />}>
+            Paginated stays
           </Button>
-        )}
+        </Stack>
         {isRefreshing && (
           <Typography variant='body2' sx={{ mt: 1, color: 'text.secondary' }}>
             Refreshing stays...
@@ -239,8 +275,19 @@ const AccommodationsPage = () => {
           {error.message}
         </Alert>
       )}
-      {hostsErrorMessage && canManageAccommodations && <Alert severity='warning'>{hostsErrorMessage}</Alert>}
+      {hostsErrorMessage && <Alert severity='warning'>{hostsErrorMessage}</Alert>}
+      {countriesErrorMessage && <Alert severity='warning'>{countriesErrorMessage}</Alert>}
       {actionErrorMessage && <Alert severity='error'>{actionErrorMessage}</Alert>}
+
+      <AccommodationFilters
+        filter={draftFilter}
+        hosts={hosts}
+        countries={countries}
+        disabled={loadingHosts || loading}
+        onChange={setDraftFilter}
+        onApply={applyFilters}
+        onReset={clearFilters}
+      />
 
       {loading && (
         <Box
@@ -260,7 +307,9 @@ const AccommodationsPage = () => {
       )}
 
       {!loading && !error && accommodations.length === 0 && (
-        <Alert severity='info'>No stays are listed yet. Check back soon.</Alert>
+        <Alert severity='info'>
+          {hasAccommodationFilters(appliedFilter) ? 'No stays match the selected filters.' : 'No stays are listed yet. Check back soon.'}
+        </Alert>
       )}
 
       {!loading && !error && accommodations.length > 0 && (

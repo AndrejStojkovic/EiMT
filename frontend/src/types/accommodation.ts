@@ -39,6 +39,24 @@ export interface AccommodationDetails {
     rented: boolean;
 }
 
+export interface AccommodationFilterDto {
+    category?: Category;
+    hostId?: number;
+    hostCountryId?: number;
+    numRooms?: number;
+    available?: boolean;
+}
+
+export interface AccommodationPage {
+    content: Accommodation[];
+    totalPages: number;
+    totalElements: number;
+    size: number;
+    number: number;
+    first: boolean;
+    last: boolean;
+}
+
 export interface AccommodationEvent {
     id: number;
     name: string;

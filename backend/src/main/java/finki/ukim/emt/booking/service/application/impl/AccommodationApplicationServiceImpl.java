@@ -31,6 +31,11 @@ public class AccommodationApplicationServiceImpl implements AccommodationApplica
     }
 
     @Override
+    public List<DisplayAccommodationDto> findAll(FilterAccommodationDto filter) {
+        return DisplayAccommodationDto.from(accommodationService.findAll(filter));
+    }
+
+    @Override
     public List<DisplayAccommodationDto> findAllByRented(Boolean rented) {
         return DisplayAccommodationDto.from(accommodationService.findAllByRented(rented));
     }

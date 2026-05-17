@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import accommodationApi from '../../api/accommodationApi';
-import type { Accommodation } from '../../types/accommodation';
+import type { Accommodation, AccommodationFilterDto } from '../../types/accommodation';
 
-const useAccommodations = () => {
+const useAccommodations = (filter: AccommodationFilterDto = {}) => {
     const [accommodations, setAccommodations] = useState<Accommodation[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
@@ -16,7 +16,7 @@ const useAccommodations = () => {
             setIsRefreshing(true);
         }
         try {
-            const response = await accommodationApi.findAll();
+            const response = await accommodationApi.findAll(filter);
             if (!isMountedRef.current) {
                 return;
             }
@@ -26,18 +26,18 @@ const useAccommodations = () => {
             if (!isMountedRef.current) {
                 return;
             }
-            setError(err instanceof Error ? err : new Error('An error has occured while loading accommodations!'));
+            setError(err instanceof Error ? err : new Error('An error has occurred while loading accommodations!'));
         } finally {
-            if (!isMountedRef.current) {
-                return;
-            }
+            // if (!isMountedRef.current) {
+            //     return;
+            // }
             if (isInitialLoad) {
                 setLoading(false);
             } else {
                 setIsRefreshing(false);
             }
         }
-    }, []);
+    }, [filter]);
 
     const fetch = useCallback(async () => {
         await loadData(false);
@@ -45,6 +45,7 @@ const useAccommodations = () => {
 
     useEffect(() => {
         isMountedRef.current = true;
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         void loadData(true);
 
         return () => {
