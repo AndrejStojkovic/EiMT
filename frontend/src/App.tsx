@@ -8,6 +8,8 @@ import HostDetailsPage from './ui/pages/HostDetailsPage/HostDetailsPage';
 import CountryDetailsPage from './ui/pages/CountryDetailsPage/CountryDetailsPage';
 import HostsPage from './ui/pages/HostsPage/HostsPage';
 import CountriesPage from './ui/pages/CountriesPage/CountriesPage';
+import LoginPage from './ui/pages/AuthPage/LoginPage';
+import RegisterPage from './ui/pages/AuthPage/RegisterPage';
 
 function App() {
   return (
@@ -28,6 +30,8 @@ function App() {
             <Route index element={<CountriesPage />} />
             <Route path=':id' element={<CountryDetailsPage />} />
           </Route>
+          <Route path='login' element={<LoginPage />} />
+          <Route path='register' element={<RegisterPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

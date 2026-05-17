@@ -4,9 +4,11 @@ import type { Accommodation } from '../../../types/accommodation';
 
 interface AccommodationGridProps {
   accommodations: Accommodation[];
+  onEditAccommodation?: (accommodation: Accommodation) => void;
+  onDeleteAccommodation?: (accommodation: Accommodation) => void;
 }
 
-const AccommodationGrid = ({ accommodations }: AccommodationGridProps) => {
+const AccommodationGrid = ({ accommodations, onEditAccommodation, onDeleteAccommodation }: AccommodationGridProps) => {
   if (accommodations.length === 0) {
     return null;
   }
@@ -25,7 +27,11 @@ const AccommodationGrid = ({ accommodations }: AccommodationGridProps) => {
           size={{ xs: 12, sm: 6, md: 4 }}
           sx={{ display: 'flex', minWidth: 0 }}
         >
-          <AccommodationCard accommodation={accommodation} />
+          <AccommodationCard
+            accommodation={accommodation}
+            onEdit={onEditAccommodation}
+            onDelete={onDeleteAccommodation}
+          />
         </Grid>
       ))}
     </Grid>

@@ -6,9 +6,6 @@ import 'dotenv/config';
 export default defineConfig({
   plugins: [react()],
   server: {
-    port: Number(process.env.PORT),
-  },
-  define: {
-    'process.env.TOKEN': JSON.stringify(process.env.TOKEN)
+    port: Number(process.env.VITE_BASE_PORT),
   }
 })

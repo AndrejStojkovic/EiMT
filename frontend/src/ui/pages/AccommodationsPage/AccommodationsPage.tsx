@@ -1,10 +1,152 @@
-import { Alert, Box, CircularProgress, Stack, Typography } from '@mui/material';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import { Alert, Box, Button, CircularProgress, Stack, Typography } from '@mui/material';
+import { AxiosError } from 'axios';
+import { useEffect, useState } from 'react';
+import accommodationApi from '../../../api/accommodationApi';
+import hostApi from '../../../api/hostApi';
 import useAccommodations from '../../../hooks/accommodation/useAccommodations';
+import { useAuth } from '../../../hooks/useAuth';
+import type { Accommodation, CreateAccommodationDto, EditAccommodationDto } from '../../../types/accommodation';
+import type { Host } from '../../../types/host';
 import AccommodationGrid from '../../components/accommodation/AccommodationGrid';
+import DeleteAccommodationModal from '../../components/accommodation/modals/DeleteAccommodationModal';
+import AccommodationUpsertModal from '../../components/accommodation/modals/AccommodationUpsertModal';
+
+const getApiErrorMessage = (error: unknown, fallback: string) => {
+  if (error instanceof AxiosError) {
+    return error.response?.data?.message ?? fallback;
+  }
+  if (error instanceof Error) {
+    return error.message;
+  }
+  return fallback;
+};
 
 const AccommodationsPage = () => {
-  const { accommodations, loading, error } = useAccommodations();
+  const { accommodations, loading, error, refetch } = useAccommodations();
+  const { user } = useAuth();
+  const [hosts, setHosts] = useState<Host[]>([]);
+  const [loadingHosts, setLoadingHosts] = useState(false);
+  const [hostsErrorMessage, setHostsErrorMessage] = useState<string | null>(null);
+  const [upsertOpen, setUpsertOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [accommodationToDelete, setAccommodationToDelete] = useState<Accommodation | null>(null);
+  const [accommodationToEdit, setAccommodationToEdit] = useState<EditAccommodationDto | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [loadingEditDetails, setLoadingEditDetails] = useState(false);
+  const [actionErrorMessage, setActionErrorMessage] = useState<string | null>(null);
+  const [modalErrorMessage, setModalErrorMessage] = useState<string | null>(null);
   const availableCount = accommodations.filter((accommodation) => !accommodation.rented).length;
+  const canManageAccommodations = Boolean(user?.roles.includes('ROLE_ADMINISTRATOR'));
+
+  useEffect(() => {
+    const loadHosts = async () => {
+      setLoadingHosts(true);
+      try {
+        const response = await hostApi.findAll();
+        setHosts(response.data);
+        setHostsErrorMessage(null);
+      } catch (err) {
+        setHostsErrorMessage(getApiErrorMessage(err, 'Could not load hosts for the accommodation form.'));
+      } finally {
+        setLoadingHosts(false);
+      }
+    };
+
+    if (canManageAccommodations) {
+      loadHosts();
+    }
+  }, [canManageAccommodations]);
+
+  const openAddModal = () => {
+    setAccommodationToEdit(null);
+    setModalErrorMessage(null);
+    setActionErrorMessage(null);
+    setUpsertOpen(true);
+  };
+
+  const openEditModal = async (accommodation: Accommodation) => {
+    setLoadingEditDetails(true);
+    setModalErrorMessage(null);
+    setActionErrorMessage(null);
+    try {
+      const detailsResponse = await accommodationApi.findById(String(accommodation.id));
+      const details = detailsResponse.data as EditAccommodationDto & { hostId?: number };
+      const host_id = details.host_id ?? details.hostId;
+      if (host_id === undefined) {
+        throw new Error('Accommodation response is missing host id.');
+      }
+      setAccommodationToEdit({ ...details, id: accommodation.id, host_id });
+      setUpsertOpen(true);
+    } catch (err) {
+      setActionErrorMessage(getApiErrorMessage(err, 'Could not load accommodation details for editing.'));
+    } finally {
+      setLoadingEditDetails(false);
+    }
+  };
+
+  const closeUpsertModal = () => {
+    if (saving) {
+      return;
+    }
+    setUpsertOpen(false);
+    setAccommodationToEdit(null);
+    setModalErrorMessage(null);
+  };
+
+  const handleUpsert = async (data: CreateAccommodationDto | EditAccommodationDto) => {
+    setSaving(true);
+    setModalErrorMessage(null);
+    try {
+      if ('id' in data) {
+        await accommodationApi.edit(String(data.id), data);
+      } else {
+        await accommodationApi.create(data);
+      }
+      setUpsertOpen(false);
+      setAccommodationToEdit(null);
+      await refetch();
+    } catch (err) {
+      setModalErrorMessage(getApiErrorMessage(err, 'Accommodation could not be saved.'));
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const openDeleteModal = (accommodation: Accommodation) => {
+    setAccommodationToDelete(accommodation);
+    setModalErrorMessage(null);
+    setDeleteOpen(true);
+  };
+
+  const closeDeleteModal = () => {
+    if (deleting) {
+      return;
+    }
+    setDeleteOpen(false);
+    setAccommodationToDelete(null);
+    setModalErrorMessage(null);
+  };
+
+  const confirmDelete = async () => {
+    if (!accommodationToDelete) {
+      return;
+    }
+
+    setDeleting(true);
+    setModalErrorMessage(null);
+    try {
+      await accommodationApi.delete(String(accommodationToDelete.id));
+      setDeleteOpen(false);
+      setAccommodationToDelete(null);
+      await refetch();
+    } catch (err) {
+      setModalErrorMessage(getApiErrorMessage(err, 'Accommodation could not be deleted.'));
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   return (
     <Stack spacing={{ xs: 3, md: 4 }} component='section' aria-labelledby='stays-heading' sx={{ py: { xs: 1, md: 1.5 } }}>
@@ -25,6 +167,11 @@ const AccommodationsPage = () => {
         <Typography variant='body1' color='text.secondary' sx={{ textAlign: 'left', maxWidth: 560 }}>
           Browse curated accommodations, compare availability, and open any listing for full details and booking info.
         </Typography>
+        {canManageAccommodations && (
+          <Button onClick={openAddModal} variant='contained' startIcon={<AddRoundedIcon />} sx={{ mt: 2 }}>
+            Add accommodation
+          </Button>
+        )}
         {!loading && !error && accommodations.length > 0 && (
           <Typography variant='body2' sx={{ mt: 1.5, color: 'primary.main', fontWeight: 600 }}>
             {availableCount} of {accommodations.length} stays currently available
@@ -37,6 +184,8 @@ const AccommodationsPage = () => {
           {error.message}
         </Alert>
       )}
+      {hostsErrorMessage && canManageAccommodations && <Alert severity='warning'>{hostsErrorMessage}</Alert>}
+      {actionErrorMessage && <Alert severity='error'>{actionErrorMessage}</Alert>}
 
       {loading && (
         <Box
@@ -60,8 +209,31 @@ const AccommodationsPage = () => {
       )}
 
       {!loading && accommodations.length > 0 && (
-        <AccommodationGrid accommodations={accommodations} />
+        <AccommodationGrid
+          accommodations={accommodations}
+          onEditAccommodation={canManageAccommodations ? openEditModal : undefined}
+          onDeleteAccommodation={canManageAccommodations ? openDeleteModal : undefined}
+        />
       )}
+
+      <AccommodationUpsertModal
+        open={upsertOpen}
+        hosts={hosts}
+        loadingHosts={loadingHosts}
+        saving={saving || loadingEditDetails}
+        errorMessage={modalErrorMessage}
+        initialAccommodation={accommodationToEdit}
+        onClose={closeUpsertModal}
+        onSubmit={handleUpsert}
+      />
+      <DeleteAccommodationModal
+        open={deleteOpen}
+        accommodationName={accommodationToDelete?.name ?? ''}
+        deleting={deleting}
+        errorMessage={modalErrorMessage}
+        onClose={closeDeleteModal}
+        onConfirm={confirmDelete}
+      />
     </Stack>
   );
 };

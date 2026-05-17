@@ -1,10 +1,12 @@
 import TravelExploreRoundedIcon from '@mui/icons-material/TravelExploreRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import {
   AppBar,
   Box,
   Button,
+  Chip,
   Container,
   Divider,
   Drawer,
@@ -22,17 +24,27 @@ import { alpha, useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useState } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router';
+import { useAuth } from '../../../../hooks/useAuth';
 
-const navItems: { label: string; to: string }[] = [
-  { label: 'Home', to: '/' },
-  { label: 'Stays', to: '/accommodations' },
+interface NavItem {
+  label: string;
+  to: string;
+  needsAuth: boolean;
+}
+
+const navItems: NavItem[] = [
+  { label: 'Home', to: '/', needsAuth: false },
+  { label: 'Stays', to: '/accommodations' , needsAuth: true},
 ];
 
 const Header = () => {
   const theme = useTheme();
   const isMdUp = useMediaQuery(theme.breakpoints.up('md'));
   const location = useLocation();
+  const { user, isLoggedIn, logout } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const isUserLoggedIn = (item: NavItem) => item != null && (!item.needsAuth || isLoggedIn);
 
   const handleDrawerToggle = () => {
     setMobileOpen((open) => !open);
@@ -57,7 +69,7 @@ const Header = () => {
       </Box>
       <Divider />
       <List sx={{ px: 1, py: 1 }}>
-        {navItems.map((item) => (
+        {navItems.map((item) => isUserLoggedIn(item) && (
           <ListItem key={item.to} disablePadding>
             <ListItemButton
               component={RouterLink}
@@ -80,6 +92,36 @@ const Header = () => {
             </ListItemButton>
           </ListItem>
         ))}
+        <Divider sx={{ my: 1 }} />
+        {isLoggedIn ? (
+          <ListItem disablePadding>
+            <ListItemButton
+              onClick={logout}
+              sx={{
+                borderRadius: 1.25,
+                color: 'error.main',
+              }}
+            >
+              <ListItemIcon sx={{ minWidth: 30, color: 'inherit' }}>
+                <LogoutRoundedIcon fontSize='small' />
+              </ListItemIcon>
+              <ListItemText primary='Sign out' slotProps={{ primary: { sx: { fontWeight: 600 } } }} />
+            </ListItemButton>
+          </ListItem>
+        ) : (
+          <>
+            <ListItem disablePadding>
+              <ListItemButton component={RouterLink} to='/login' sx={{ borderRadius: 1.25 }}>
+                <ListItemText primary='Login' slotProps={{ primary: { sx: { fontWeight: 600 } } }} />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton component={RouterLink} to='/register' sx={{ borderRadius: 1.25 }}>
+                <ListItemText primary='Register' slotProps={{ primary: { sx: { fontWeight: 600 } } }} />
+              </ListItemButton>
+            </ListItem>
+          </>
+        )}
       </List>
     </Box>
   );
@@ -153,7 +195,7 @@ const Header = () => {
 
           {isMdUp ? (
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              {navItems.map((item) => (
+              {navItems.map((item) => isUserLoggedIn(item) && (
                 <Button
                   key={item.to}
                   component={RouterLink}
@@ -170,9 +212,33 @@ const Header = () => {
                   {item.label}
                 </Button>
               ))}
-              <Button variant='contained' color='secondary' sx={{ ml: 0.5 }}>
-                Start booking
-              </Button>
+              {isLoggedIn ? (
+                <>
+                  <Chip
+                    label={user?.username ?? 'Logged in'}
+                    color='secondary'
+                    variant='outlined'
+                    sx={{ ml: 0.5, fontWeight: 700 }}
+                  />
+                  <Button
+                    onClick={logout}
+                    variant='contained'
+                    color='secondary'
+                    startIcon={<LogoutRoundedIcon />}
+                  >
+                    Sign out
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button component={RouterLink} to='/login' variant='outlined' sx={{ ml: 0.5 }}>
+                    Login
+                  </Button>
+                  <Button component={RouterLink} to='/register' variant='contained' color='secondary'>
+                    Register
+                  </Button>
+                </>
+              )}
             </Box>
           ) : (
             <IconButton

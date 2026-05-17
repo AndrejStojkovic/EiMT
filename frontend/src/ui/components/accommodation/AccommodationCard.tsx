@@ -25,9 +25,11 @@ import type { Accommodation } from '../../../types/accommodation';
 
 interface AccommodationCardProps {
   accommodation: Accommodation;
+  onEdit?: (accommodation: Accommodation) => void;
+  onDelete?: (accommodation: Accommodation) => void;
 }
 
-const AccommodationCard = ({ accommodation }: AccommodationCardProps) => {
+const AccommodationCard = ({ accommodation, onEdit, onDelete }: AccommodationCardProps) => {
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
   const menuOpen = Boolean(menuAnchor);
   const detailPath = `/accommodations/${accommodation.id}`;
@@ -191,7 +193,9 @@ const AccommodationCard = ({ accommodation }: AccommodationCardProps) => {
         <MenuItem
           onClick={() => {
             handleMenuClose();
+            onEdit?.(accommodation);
           }}
+          disabled={!onEdit}
         >
           <ListItemIcon>
             <EditRoundedIcon fontSize='small' />
@@ -201,7 +205,9 @@ const AccommodationCard = ({ accommodation }: AccommodationCardProps) => {
         <MenuItem
           onClick={() => {
             handleMenuClose();
+            onDelete?.(accommodation);
           }}
+          disabled={!onDelete}
           sx={{ color: 'error.main' }}
         >
           <ListItemIcon>
