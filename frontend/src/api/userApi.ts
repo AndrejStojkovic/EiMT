@@ -7,6 +7,18 @@ const userApi = {
     },
     login: async (data: LoginRequest) => {
         return await useAxios.post<LoginResponse>('/user/login', data);
+    },
+    findAll: async () => {
+        return await useAxios.get<RegisterResponse[]>('/user/all');
+    },
+    findByUsername: async (username: string) => {
+        return await useAxios.get<RegisterResponse>(`/user/${username}`);
+    },
+    edit: async (data: RegisterResponse) => {
+        return await useAxios.put<RegisterResponse>(`/user/edit/${data.username}`, data);
+    },
+    delete: async (username: string) => {
+        return await useAxios.delete<RegisterResponse>(`/user/delete/${username}`);
     }
 };
 

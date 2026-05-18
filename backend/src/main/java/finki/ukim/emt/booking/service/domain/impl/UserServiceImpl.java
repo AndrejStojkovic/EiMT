@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
@@ -20,6 +22,11 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+    }
+
+    @Override
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 
     @Override
@@ -66,6 +73,30 @@ public class UserServiceImpl implements UserService {
         }
         user.setRole(role);
         return userRepository.save(user);
+    }
+
+    @Override
+    public User update(String username, String name, String surname, String email, Role role) {
+        User existingUser = userRepository.findByUsername(username);
+        if(existingUser == null) {
+            throw new UserNotFoundException(username);
+        }
+        existingUser.setUsername(username);
+        existingUser.setName(name);
+        existingUser.setSurname(surname);
+        existingUser.setEmail(email);
+        existingUser.setRole(role);
+        return userRepository.save(existingUser);
+    }
+
+    @Override
+    public User delete(String username) {
+        User user = userRepository.findByUsername(username);
+        if(user == null) {
+            throw new UserNotFoundException(username);
+        }
+        userRepository.delete(user);
+        return user;
     }
 
     @Override

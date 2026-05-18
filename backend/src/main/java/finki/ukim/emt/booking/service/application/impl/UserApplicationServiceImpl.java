@@ -11,6 +11,8 @@ import finki.ukim.emt.booking.service.application.UserApplicationService;
 import finki.ukim.emt.booking.service.domain.UserService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserApplicationServiceImpl implements UserApplicationService {
     private final UserService userService;
@@ -19,6 +21,12 @@ public class UserApplicationServiceImpl implements UserApplicationService {
     public UserApplicationServiceImpl(UserService userService, JwtHelper jwtHelper) {
         this.userService = userService;
         this.jwtHelper = jwtHelper;
+    }
+
+    @Override
+    public List<RegisterUserResponseDto> findAll() {
+        return userService.findAll()
+                .stream().map(RegisterUserResponseDto::from).toList();
     }
 
     @Override
@@ -44,5 +52,21 @@ public class UserApplicationServiceImpl implements UserApplicationService {
     public RegisterUserResponseDto setUserRole(String username, Role role) {
         User user = userService.setUserRole(username, role);
         return RegisterUserResponseDto.from(user);
+    }
+
+    @Override
+    public RegisterUserResponseDto update(RegisterUserResponseDto user) {
+        return RegisterUserResponseDto.from(userService.update(
+                user.username(),
+                user.name(),
+                user.surname(),
+                user.email(),
+                user.role()
+        ));
+    }
+
+    @Override
+    public RegisterUserResponseDto delete(String username) {
+        return RegisterUserResponseDto.from(userService.delete(username));
     }
 }

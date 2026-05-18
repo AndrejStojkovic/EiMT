@@ -40,9 +40,10 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { label: 'Home', to: '/', needsAuth: false },
-  { label: 'Accommodations', to: '/accommodations' , needsAuth: true},
-  { label: 'Hosts', to: '/hosts' , needsAuth: true},
-  { label: 'Countries', to: '/countries' , needsAuth: true},
+  { label: 'Accommodations', to: '/accommodations' , needsAuth: true },
+  { label: 'Hosts', to: '/hosts' , needsAuth: true },
+  { label: 'Countries', to: '/countries' , needsAuth: true },
+  { label: 'Users', to: '/users', needsAuth: true }
 ];
 
 const Header = () => {

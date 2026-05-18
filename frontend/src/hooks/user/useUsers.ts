@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
-import countryApi from '../../api/countryApi';
-import type { Country } from '../../types/country';
+import userApi from '../../api/userApi';
+import type { RegisterResponse } from '../../types/user';
 
-const useCountries = () => {
-    const [countries, setCountries] = useState<Country[]>([]);
+const useUsers = () => {
+    const [users, setUsers] = useState<RegisterResponse[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
     const [error, setError] = useState<Error | null>(null);
@@ -14,12 +14,13 @@ const useCountries = () => {
         } else {
             setIsRefreshing(true);
         }
+
         try {
-            const response = await countryApi.findAll();
-            setCountries(response.data);
+            const response = await userApi.findAll();
+            setUsers(response.data);
             setError(null);
         } catch (err) {
-            setError(err instanceof Error ? err : new Error('An error has occured while loading countries!'));
+            setError(err instanceof Error ? err : new Error('An error has occured while loading users!'));
         } finally {
             if (isInitialLoad) {
                 setLoading(false);
@@ -38,7 +39,7 @@ const useCountries = () => {
         void loadData(true);
     }, [loadData]);
 
-    return { countries, loading, isRefreshing, error, fetch };
+    return { users, loading, isRefreshing, error, fetch };
 }
 
-export default useCountries;
+export default useUsers;

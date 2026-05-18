@@ -42,13 +42,8 @@ const useHosts = () => {
     }, [loadData]);
 
     useEffect(() => {
-        const timeoutId = window.setTimeout(() => {
-            void loadData(true);
-        }, 0);
-
-        return () => {
-            window.clearTimeout(timeoutId);
-        };
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        void loadData(true);
     }, [loadData]);
 
     return { hosts, loading, isRefreshing, error, fetch };

@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
@@ -17,6 +19,11 @@ public class UserController {
 
     public UserController(UserApplicationService userApplicationService) {
         this.userApplicationService = userApplicationService;
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<RegisterUserResponseDto>> findAll() {
+        return ResponseEntity.ok(userApplicationService.findAll());
     }
 
     @GetMapping("/{username}")
@@ -50,5 +57,20 @@ public class UserController {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(loginUserResponseDto);
+    }
+
+    @PutMapping("/edit/{username}")
+    public ResponseEntity<RegisterUserResponseDto> edit(
+            @PathVariable String username,
+            @RequestBody RegisterUserResponseDto registerUserResponseDto) {
+        if(registerUserResponseDto == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(userApplicationService.update(registerUserResponseDto));
+    }
+
+    @DeleteMapping("/delete/{username}")
+    public ResponseEntity<RegisterUserResponseDto> delete(@PathVariable String username) {
+        return ResponseEntity.ok(userApplicationService.delete(username));
     }
 }
